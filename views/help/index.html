@@ -3,11 +3,45 @@
     <head>
         <title>Get Help</title>
         <script>
-            function getResponse() {
-               var inputData = document.getElementById('search').value;
-               if (inputData == '') {
-                    return false;
+            var filter;
+            function setFilter() {
+               var searchdiv = document.getElementById("search-div");
+               var coordinatesinput = document.getElementById("coordinates-input");
+               if (coordinatesinput)
+                   searchdiv.removeChild(coordinatesinput);
+               searchdiv.innerHTML = "<input type='text' id='search' placeholder='Search...' onkeyup='getResponse()'/>";
+               filter = document.getElementById("filter").value;
+               if (filter == "Organisation Name")
+                   filter = "name";
+               else if (filter == "Organisation Type")
+                   filter = "type";
+               filter = filter.toLowerCase();
+               if (filter == "coordinates") {
+                   searchdiv.removeChild(document.getElementById("search"));
+                   searchdiv.innerHTML = "<div id='coordinates-input'>" +
+                                         "<input type='number' id='latinp' onkeyup='getResponse()' placeholder='Latitude' step='0.01' min='-90' max='90'/>" +
+                                         "<input type='number' id='loninp' onkeyup='getResponse()' placeholder='Longitude' step='0.01' min='-180' max='180'/>" +
+                                         "</div>";
                }
+            }
+
+            function getResponse() {
+               var search = document.getElementById("search");
+               if (search != null)
+                   search = search.value;
+               else
+                   search = "";
+               var latitude = document.getElementById("latinp");
+               var longitude = document.getElementById("loninp");
+               if (!latitude || !longitude) {
+                   latitude = "";
+                   longitude = "";
+               }
+               else {
+                   latitude = latitude.value;
+                   longitude = longitude.value;
+               }
+
                var xmlhttp = new XMLHttpRequest();
                xmlhttp.onreadystatechange = function() {
                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -15,16 +49,31 @@
                        document.getElementById("responseTable").innerHTML = temp;
                    }
                }
-               xmlhttp.open("GET", "search?q=" + inputData, true);
+               xmlhttp.open("GET", "search?q=" + search +
+                                   "&filter=" + filter +
+                                   "&lat=" + latitude +
+                                   "&lon=" + longitude, true);
                xmlhttp.send();
             }
         </script>
     </head>
 
-    <body>
+    <body onload="setFilter()">
         <h2>Search</h2>
-        <p><b>Hospital search:</b></p>
-        <input type="text" id='search' onkeyup='getResponse()'/>
+        <select id="filter" onchange="setFilter()">
+            <option>Organisation Name</option>
+            <option>Organisation Type</option>
+            <option>Address</option>
+            <option>Coordinates</option>
+        </select>
+        <br />
+        <div id="search-div">
+            <input type="text" id="search" placeholder="Search..." onkeyup="getResponse()"/>
+            <div id="coordinates-input">
+                <input type="number" placeholder="Latitude" step="0.01" min="-90" max="90"/>
+                <input type="number" placeholder="Longitude" step="0.01" min="-180" max="180"/>
+            </div>
+        </div>
         <!-- @todo: At present hardcoded for hospitals 
                     extend this for fire stations, police stations, etc.
         -->
