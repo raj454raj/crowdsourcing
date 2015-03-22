@@ -1,0 +1,34 @@
+{{extend 'layout.html'}}
+<html>
+    <head>
+        <title>Get Help</title>
+        <script>
+            function getResponse() {
+               var inputData = document.getElementById('search').value;
+               if (inputData == '') {
+                    return false;
+               }
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                       temp = xmlhttp.responseText
+                       document.getElementById("responseTable").innerHTML = temp;
+                   }
+               }
+               xmlhttp.open("GET", "search?q=" + inputData, true);
+               xmlhttp.send();
+            }
+        </script>
+    </head>
+
+    <body>
+        <h2>Search</h2>
+        <p><b>Hospital search:</b></p>
+        <input type="text" id='search' onkeyup='getResponse()'/>
+        <!-- @todo: At present hardcoded for hospitals 
+                    extend this for fire stations, police stations, etc.
+        -->
+        <div id="responseTable"></div>
+
+    </body>
+</html>
