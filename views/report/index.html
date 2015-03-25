@@ -2,9 +2,31 @@
 <html>
     <head>
         <title> Report Disaster </title>
+        <script>
+
+            function fillCoordinates() {
+                if (document.getElementById("check").checked) {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                            locationJSON = JSON.parse(xmlhttp.responseText);
+                            document.getElementById("lat").value = locationJSON["latitude"];
+                            document.getElementById("lon").value = locationJSON["longitude"];
+                        }
+                    }
+                    xmlhttp.open("GET", "get_coordinates/", true);
+                    xmlhttp.send();
+
+                }
+                else {
+                    return false;
+                }
+            }
+
+        </script>
     </head>
     <body>
-    <h2>Report Disaster</h2>
-    {{=form}}
+        <h2>Report Disaster</h2>
+        {{=form}}
     </body>
 </html>
