@@ -41,30 +41,32 @@ def user():
 
 
 def email():
-    form=FORM(
-        DIV('Username:',INPUT(_name='name',requires=IS_NOT_EMPTY())),DIV('Password:',
-         INPUT(_name='password',_type='password',requires=IS_NOT_EMPTY())), DIV('sendto',INPUT(_name='sendto',requires=IS_NOT_EMPTY())),
-         DIV('Subject:',INPUT(_name='Subject',requires=IS_NOT_EMPTY())),DIV('Message:',INPUT(_name='Message',requires=IS_NOT_EMPTY())),
-         DIV(INPUT(_type='submit',_value='SEND!')))
+    form = FORM(TABLE(TR(TD('Username:'), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Password:'), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
+                      TR(TD('Send To'), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Subject:'), TD(INPUT(_name='Subject',requires=IS_NOT_EMPTY()))),
+                      TR(TD('Message:'), TD(INPUT(_name='Message',requires=IS_NOT_EMPTY()))),
+                      TR(INPUT(_type='submit', _value='SEND')),
+                      ))
+
     if form.accepts(request,session):
         email = str(request.vars['name']) + "@students.iiit.ac.in"
-        password = str(request.vars['password'])                
-        from gluon.tools import Mail         
-        mail = Mail()         
+        password = str(request.vars['password'])
+        from gluon.tools import Mail
+        mail = Mail()
         mail.settings.server = "students.iiit.ac.in:25"
         mail.settings.sender = email
         mail.settings.login = str(request.vars['name']) + ":" + password
-        print mail.settings.login
-        mail.send(to=[str(request.vars['sendto'])], 
-                  subject=str(request.vars['Subject']), 
-                   # If reply_to is omitted, then mail.settings.sender is used 
-                   message=str(request.vars['Message'])) 
-        response.flash = 'Message sent'    
+        mail.send(to=[str(request.vars['sendto'])],
+                  subject=str(request.vars['Subject']),
+                  # If reply_to is omitted, then mail.settings.sender is used
+                  message=str(request.vars['Message']))
+        response.flash = 'Message sent'
     elif form.errors:
         response.flash = 'Error Occured'
     else:
-        response.flash = 'please fill the form'       
-    return dict(message=T('DoNe') , form = form)
+        response.flash = 'Please fill the form'
+    return dict(form=form)
 
 @cache.action()
 def download():
