@@ -24,8 +24,15 @@ def index():
 def get_coordinates():
 
     import requests
-    import json
     from bs4 import BeautifulSoup
+
+    try:
+        import json # try stdlib (Python 2.6)
+    except ImportError:
+        try:
+            import simplejson as json # try external module
+        except:
+            import gluon.contrib.simplejson as json # fallback to pure-Python module
 
     empty_dict = json.dumps(dict(country="",
                                  city="",
