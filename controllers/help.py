@@ -21,14 +21,17 @@ def search():
     complete_data = {"hospitals": [["Hospital1", "phone1", "email1", 10, 20, "address1"],
                                    ["Hospital2", "phone2", "email2", 20, 30, "address2"],
                                    ["Hospital3", "phone3", "email3", 30, 40, "address3"],
+                                   ["Himagiri", "phone-hyd", "email4", 17, 78, "Gachibowli"],
                                    ],
                      "firestation": [["FireStation1", "phone1", "email1", 20, 30, "address1"],
                                      ["FireStation2", "phone2", "email2", 30, 40, "address2"],
                                      ["FireStation3", "phone3", "email3", 40, 50, "address3"],
+                                     ["FireStation4", "phone4", "email4", 15, 80, "Gachibowli"],
                                      ],
                      "policestation": [["PoliceStation1", "phone1", "email1", 30, 40, "address1"],
                                        ["PoliceStation2", "phone2", "email2", 40, 50, "address2"],
                                        ["PoliceStation3", "phone3", "email3", 50, 60, "address3"],
+                                       ["PoliceStation-hyd", "phone4", "email4", 20, 75, "Gachibowli"]
                                        ]
                      }
     searched_list = {"hospitals": [],
