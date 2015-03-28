@@ -8,15 +8,18 @@ def index():
                       TR(TD("Location: "),
                          TD(INPUT(_name="lat", _type="number",
                                   _max="90", _min="-90",
-                                  _step="0.01", _id="lat")),
-                         TD(INPUT(_name="lon", _type="number",
+                                  _step="0.000001", _id="lat",
+                                  _placeholder="Latitude"),
+                            INPUT(_name="lon", _type="number",
                                   _max="180", _min="-180",
-                                  _step="0.01", _id="lon")),
+                                  _step="0.000001", _id="lon",
+                                  _placeholder="Longitude")),
                          ),
                       TR(TD("Get my current coordinates: "),
                          TD(INPUT(_name="current-location", _type="checkbox",
                                   _onclick="fillCoordinates()", _id="check")),
                          ),
+                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px")))
                       ),
                 INPUT(_name="submit", _type="submit", _value="Report"))
     return dict(form=form)
@@ -63,8 +66,8 @@ def get_coordinates():
     longitude = temp_list[4].split(' ')[1]
 
     # Set precision to 2
-    latitude = "%.2f" % float(latitude)
-    longitude = "%.2f" % float(longitude)
+    latitude = "%.6f" % float(latitude)
+    longitude = "%.6f" % float(longitude)
 
     return json.dumps(dict(country=country,
                            city=city,
