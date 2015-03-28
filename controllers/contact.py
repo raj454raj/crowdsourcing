@@ -1,10 +1,10 @@
 def index():
-    form = FORM(TABLE(TR(TD("First Name: "), TD(INPUT(_name="fname", _type="text", 
+    form = FORM(TABLE(TR(TD(B("First Name: ")), TD(INPUT(_name="fname", _type="text",_placeholder="First Name",
                                                       requires=IS_NOT_EMPTY()))),
-                      TR(TD("Last Name: "), TD(INPUT(_name="lname", _type="text"))),
-                      TR(TD("Email: "), TD(INPUT(_name="email", _type="email",
+                      TR(TD(B("Last Name: ")), TD(INPUT(_name="lname", _type="text", _placeholder="Last Name"))),
+                      TR(TD(B("Email: ")), TD(INPUT(_name="email", _type="email",_placeholder="E-mail",
                                                  requires=IS_NOT_EMPTY()))),
-                      TR(TD("Phone Number: "), TD(INPUT(_name="phoneno"))),
+                      TR(TD(B("Phone Number: ")), TD(INPUT(_name="phoneno", _placeholder="Phone Number"))),
                       _class="table",
                       ),
                 INPUT(_type="submit", _value="Submit Response"))
