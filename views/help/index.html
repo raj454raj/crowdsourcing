@@ -78,19 +78,17 @@
                xmlhttp.send();
             }
         </script>
-        <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
-        <script type='text/javascript' src='../static/js/select.js'></script>
     </head>
 
     <body onload="setFilter()">
-        <u><h2>Search</h2></u>
-        <select id="filter" onchange="setFilter()" class="turnintodropdown">
-          <option>Organisation Name</option>
-          <option>Organisation Type</option>
-          <option>Address</option>
-          <option>Coordinates</option>
+        <h2>Search</h2>
+        <select id="filter" onchange="setFilter()">
+            <option>Organisation Name</option>
+            <option>Organisation Type</option>
+            <option>Address</option>
+            <option>Coordinates</option>
         </select>
-        <br /><br>
+        <br />
         <div id="search-div">
             <input type="text" id="search" placeholder="Search..." onkeyup="getResponse()"/>
             <div id="coordinates-input">

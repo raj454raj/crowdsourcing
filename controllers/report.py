@@ -1,11 +1,11 @@
 def index():
-    form = FORM(TABLE(TR(TD(B("Type of disaster: ")), TD(SELECT("Earthquake",
+    form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
                                                              "Floods",
                                                              "Landslides",
                                                              "Fire",
                                                              "Tsunami",
                                                              "Cyclones"))),
-                      TR(TD(B("Location: ")),
+                      TR(TD("Location: "),
                          TD(INPUT(_name="lat", _type="number",
                                   _max="90", _min="-90",
                                   _step="0.000001", _id="lat",
@@ -19,9 +19,8 @@ def index():
                          TD(INPUT(_name="current-location", _type="checkbox",
                                   _onclick="fillCoordinates()", _id="check")),
                          ),
-                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px"))),
-                      _class="table"
-                     ),
+                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px")))
+                      ),
                 INPUT(_name="submit", _type="submit", _value="Report"))
     return dict(form=form)
 
