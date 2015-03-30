@@ -43,9 +43,9 @@ def user():
 def email():
     form = FORM(TABLE(TR(TD('Username:'), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
                       TR(TD('Password:'), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
-                      TR(TD('Send To'), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Subject:'), TD(INPUT(_name='Subject',requires=IS_NOT_EMPTY()))),
-                      TR(TD('Message:'), TD(INPUT(_name='Message',requires=IS_NOT_EMPTY()))),
+                      TR(TD('Send To:'), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Subject:'), TD(INPUT(_name='Subject', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Message:'), TD(TEXTAREA(_name='Message', requires=IS_NOT_EMPTY()))),
                       TR(INPUT(_type='submit', _value='SEND')),
                       ))
 

@@ -5,6 +5,9 @@ def index():
                       TR(TD("Email: "), TD(INPUT(_name="email", _type="email",
                                                  requires=IS_NOT_EMPTY()))),
                       TR(TD("Phone Number: "), TD(INPUT(_name="phoneno"))),
+                      TR(TD("Subject: "), TD(INPUT(_name="subject"))),
+                      TR(TD("Message: ", TD(TEXTAREA(_name="message",
+                                                     requires=IS_NOT_EMPTY())))),
                       _class="table",
                       ),
                 INPUT(_type="submit", _value="Submit Response"))

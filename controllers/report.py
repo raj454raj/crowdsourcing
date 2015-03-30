@@ -26,8 +26,8 @@ def index():
 
 def get_coordinates():
 
-    import requests
-    from bs4 import BeautifulSoup
+    # If getting errors with this function make sure the version
+    # of the modules required is as specified(requests, bs4)
 
     try:
         import json # try stdlib (Python 2.6)
@@ -41,6 +41,14 @@ def get_coordinates():
                                  city="",
                                  latitude="",
                                  longitude=""))
+
+    try:
+        # Working with requests version 2.5.1
+        import requests
+        # Working with bs4 version 4.3.1
+        from bs4 import BeautifulSoup
+    except ImportError:
+        return empty_dict
 
     # URL to get the public IP
     url = "http://ipecho.net/plain"
@@ -65,7 +73,7 @@ def get_coordinates():
     latitude = temp_list[3].split(' ')[1]
     longitude = temp_list[4].split(' ')[1]
 
-    # Set precision to 2
+    # Set precision to 6
     latitude = "%.6f" % float(latitude)
     longitude = "%.6f" % float(longitude)
 
