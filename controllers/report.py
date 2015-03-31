@@ -1,11 +1,12 @@
 def index():
-    form = FORM(TABLE(TR(TD(B("Type of disaster: ")), TD(SELECT("Earthquake",
+    form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
                                                              "Floods",
                                                              "Landslides",
                                                              "Fire",
                                                              "Tsunami",
-                                                             "Cyclones"))),
-                      TR(TD(B("Location: ")),
+                                                             "Cyclones",
+                                                             _name="type"))),
+                      TR(TD("Location: "),
                          TD(INPUT(_name="lat", _type="number",
                                   _max="90", _min="-90",
                                   _step="0.000001", _id="lat",
@@ -19,16 +20,15 @@ def index():
                          TD(INPUT(_name="current-location", _type="checkbox",
                                   _onclick="fillCoordinates()", _id="check")),
                          ),
-                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px"))),
-                      _class="table"
-                     ),
+                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px")))
+                      ),
                 INPUT(_name="submit", _type="submit", _value="Report"))
     return dict(form=form)
 
 def get_coordinates():
 
-    import requests
-    from bs4 import BeautifulSoup
+    # If getting errors with this function make sure the version
+    # of the modules required is as specified(requests, bs4)
 
     try:
         import json # try stdlib (Python 2.6)
@@ -42,6 +42,14 @@ def get_coordinates():
                                  city="",
                                  latitude="",
                                  longitude=""))
+
+    try:
+        # Working with requests version 2.5.1
+        import requests
+        # Working with bs4 version 4.3.1
+        from bs4 import BeautifulSoup
+    except ImportError:
+        return empty_dict
 
     # URL to get the public IP
     url = "http://ipecho.net/plain"
@@ -66,7 +74,7 @@ def get_coordinates():
     latitude = temp_list[3].split(' ')[1]
     longitude = temp_list[4].split(' ')[1]
 
-    # Set precision to 2
+    # Set precision to 6
     latitude = "%.6f" % float(latitude)
     longitude = "%.6f" % float(longitude)
 

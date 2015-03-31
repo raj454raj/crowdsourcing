@@ -1,23 +1,57 @@
 {{extend 'layout.html'}}
 <h1>DisRes</h1>
-<div class="row" style="width:900px">
-        <div class="col-md-8" id="main-content">
-          <p style="font-size:20px;">A disaster management and rescue tool.</p>
-<!--          <div class="list-group">
-            <a href="../report/index.html" class="list-group-item">Report Disasters</a>
-            <a href="../help/index.html" class="list-group-item">Get Help!</a>
-            <a href="email.html" class="list-group-item">Email Us</a>
-            <a href="../contact/index.html" class="list-group-item">Contact Us</a>
-          </div>-->
+<script src="/crowdsourcing/static/js/bootstrap.js"></script>
+<style>
+.selected img {
+    opacity:0.5;
+}
+</style>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12" id="slider">
+            
+                <div class="col-md-12" id="carousel-bounding-box">
+                    <div id="myCarousel" class="carousel slide">
+                        <!-- main slider carousel items -->
+                        <div class="carousel-inner">
+                            <div class="active item" data-slide-number="0">
+                                <img src="/crowdsourcing/static/images/fire.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="1">
+                              <img src="/crowdsourcing/static/images/cyclone.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="2">
+                                <img src="/crowdsourcing/static/images/floods.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="3">
+                                <img src="/crowdsourcing/static/images/tsunami.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="4">
+                                <img src="/crowdsourcing/static/images/earthquake.jpg" class="img-responsive">
+                            </div>
+                        </div>
+                        <!-- main slider carousel nav controls --> <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+
+                        <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+                    </div>
+                </div>
+
         </div>
-        <div class="col-md-4" id="side-content">
-          <center><b>Tweets</b><img src="../static/images/twitter_bird.png"/></center>
-          <!--<ul class="list-group">
-          	<li class="list-group-item"></li>
-          	<li class="list-group-item"></li>
-          	<li class="list-group-item"></li>
-          	<li class="list-group-item"></li>
-          </ul>-->
-          </div>
-        </div>
+    </div>
+    <!--/main slider carousel-->
+
 </div>
+<script>
+$('#myCarousel').carousel({
+    interval: 4000
+});
+
+// when the carousel slides, auto update
+$('#myCarousel').on('slid', function (e) {
+  var id = $('.item.active').data('slide-number');
+  id = parseInt(id);
+  $('[id^=carousel-selector-]').removeClass('selected');
+  $('[id=carousel-selector-'+id+']').addClass('selected');
+});
+</script>

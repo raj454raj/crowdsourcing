@@ -26,6 +26,8 @@ response.menu = [
     (T('Get Help!'), False, URL('help', 'index'), []),
     (T('Contact Us'), False, URL('contact', 'index'), []),
     (T('Send Email'), False, URL('default', 'email'), []),
+    (T('Register Organisation'), False, URL('register', 'org'), []),
+    (T('Register User'), False, URL('register', 'user'), []),
 ]
 
 if "auth" in locals(): auth.wikimenu() 

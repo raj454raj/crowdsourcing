@@ -41,15 +41,13 @@ def user():
 
 
 def email():
-    form = FORM(TABLE(TR(TD(B('Username:')), TD(INPUT(_name='name', _placeholder='Username', requires=IS_NOT_EMPTY()))),
-                      TR(TD(B('Password:')), TD(INPUT(_name='password',_placeholder="Password", _type='password', requires=IS_NOT_EMPTY()))), 
-                      TR(TD(B('Send To:')), TD(INPUT(_name='sendto', _placeholder="Receiver E-mail", requires=IS_NOT_EMPTY()))),
-                      TR(TD(B('Subject:')), TD(INPUT(_name='Subject',_placeholder="Subject", requires=IS_NOT_EMPTY()))),
-                      TR(TD(B('Message:')), TD(TEXTAREA(_name='Message', _placeholder="Message",requires=IS_NOT_EMPTY()))),
+    form = FORM(TABLE(TR(TD('Username:'), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Password:'), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
+                      TR(TD('Send To:'), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Subject:'), TD(INPUT(_name='Subject', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Message:'), TD(TEXTAREA(_name='Message', requires=IS_NOT_EMPTY()))),
                       TR(INPUT(_type='submit', _value='SEND')),
-                      _class="table"
-                      ), 
-               _class="form-group")
+                      ))
 
     if form.accepts(request,session):
         email = str(request.vars['name']) + "@students.iiit.ac.in"
