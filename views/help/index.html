@@ -79,7 +79,7 @@
             }
         </script>
     </head>
-
+    <div class="flash">{{=response.flash or ''}}</div>
     <body onload="setFilter()">
         <h2>Search</h2>
         <select id="filter" onchange="setFilter()">
