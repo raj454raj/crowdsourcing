@@ -31,7 +31,7 @@
         initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
         user-scalable = yes allows the user to zoom in -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta property="og:image" content="http://lipis.github.io/bootstrap-social/assets/img/bootstrap-social.png" />
   <link rel="shortcut icon" href="{{=URL('static','images/favicon.ico')}}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{=URL('static','images/favicon.png')}}">
 
@@ -68,6 +68,7 @@
 <body>
   <!-- Navbar ================================================== -->
   <div class="navbar navbar-inverse">
+    <div class="flash">{{=response.flash or ''}}</div>
     <div class="navbar-inner">
       <div class="container">
         {{is_mobile=request.user_agent().is_mobile}}
@@ -118,12 +119,27 @@
     <!-- Footer ================================================== -->
     <div class="row">
         <footer class="footer span12" id="footer">
-            <div class="footer-content">
-                {{block footer}} <!-- this is default footer -->
-                <div id="poweredBy" class="pull-right">
-                    {{=T('Powered by')}}
-                    <a href="http://www.web2py.com/">web2py</a>
+            <div class="footer-content  footer-inverse">
+              {{block footer}} <!-- this is default footer -->
+              <div class="copyright pull-right">{{=T('Copyright')}} &#169; {{=request.now.year}} All rights reserved</div>
+
+              <div class="col-md-6">
+                <h5 class="short">Contact Us</h5>
+                <ul class="list icons list-unstyled push-top">
+                  <li><i class="icon icon-envelope"></i> <strong>Email:</strong> <a href="mailto:helpatdisres@gmail.com"> helpatdisres@gmail.com</a></li>
+                  <li><i class="icon icon-globe"></i> <strong>Website:</strong> <short> <a href="http://disres.com">www.disres.com</a> </short> </li>
+                  <li><i class="icon icon-comment"></i> <strong>Facebook:</strong> <a href="http://facebook.com/disres" target="_blank"> www.facebook.com/disres </a></li>                
+                </ul>
+                <div class="social-icons push-top">
+                  <ul class="social-icons" style="list-style-type:none;display:inline-flex;">
+
+                    <li class="facebook"><a href="http://www.facebook.com/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Facebook"><img alt="Facebook" src="{{=URL('static', 'images/facebook-round.png')}}" /></a></li>
+                    <li class="twitter"><a href="http://www.twitter.com/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Twitter"><img alt="Twitter" src="{{=URL('static', 'images/twitter-round.png')}}" /></a></li>
+                    <li class="pinterest"><a href="http://www.pinterest.com/company/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Pinterest"><img alt="Pinterest" src="{{=URL('static', 'images/pinterest.png')}}" /></a></li>
+                    <li class="google-plus"><a href="https://plus.google.com/108744412005771885874/posts?hl=en" target="_blank" data-placement="bottom" rel="tooltip" title="google"><img alt="Google-Plus" src="{{=URL('static', 'images/googleplus.png')}}" /></a></li>
+                  </ul>
                 </div>
+              </div>
                 {{end}}
             </div>
         </footer>

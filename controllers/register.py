@@ -1,6 +1,6 @@
 def org():
 
-    form = FORM(TABLE(TR(TD("Organistion Name: "), TD(INPUT(_name="name"))),
+    form = FORM(TABLE(TR(TD("Organistion Name: "), TD(INPUT(_name="org_name"))),
                       TR(TD("Email: "), TD(INPUT(_name="email", _type="email"))),
                       TR(TD("Phone Number: "), TD(INPUT(_name="username"))),
                       TR(TD("Password: "), TD(INPUT(_name="password", _type="password"))),
@@ -16,6 +16,7 @@ def org():
                                                  OPTION("NGO(Rescue)", _value="NGOR"),
                                                  OPTION("NGO(Shelter)", _value="NGOS"),
                                                  OPTION("Blood Bank", _value="BB"),
+                                                 OPTION("Miscellaneous", _value="MISC"),
                                                  _name="org_type"))),
                       TR(TD("Location: "),
                          TD(INPUT(_name="latitude", _type="number",
@@ -27,33 +28,43 @@ def org():
                                   _step="0.000001", _id="lon",
                                   _placeholder="Longitude")),
                          ),
+                      TR(TD("Description: "), TD(TEXTAREA(_name="description"))),
                       TR(TD(INPUT(_type="submit", _value="Register")))
                       ))
 
     if request.vars:
 
-        types_list = []
         request_dict = {}
-
         for i in request.vars:
-            if request.vars[i] == "on" and len(i) <= 3:
-                types_list.append(i)
-            else:
+            if i not in ['username', 'password', 'email']:
                 request_dict[i] = request.vars[i]
-        request_dict["tags"] = []
-
+        request_dict['user'] = {'username': request.vars['username'],
+                                'password': request.vars['password'],
+                                'email': request.vars['email'],
+                                }
         # Send HTTP request to the REST server
-        """
         import requests, json
-        url = "URL to REST server"
+        url = "http://127.0.0.1:9000/organisations/"
         data = json.dumps(request_dict)
-        r = requests.post(url, data)
-        """
+        headers = {'content-type': 'application/json'}
+        r = requests.post(url, data=data, headers=headers)
+
     return dict(form=form)
 
 def user():
+
     form = FORM(TABLE(TR(TD("Phone Number: "), TD(INPUT(_name="username"))),
                       TR(TD("Email: ", TD(INPUT(_name="email", _type="email")))),
                       TR(TD("Password: ", TD(INPUT(_name="password", _type="password")))),
                       TR(TD(INPUT(_type="submit", _value="Register")))))
+
+    import json, requests
+    if request.vars:
+
+        # Send HTTP request to the REST server
+        url = "http://127.0.0.1:9000/users/"
+        data = json.dumps(request.vars)
+        headers = {'content-type': 'application/json'}
+        r = requests.post(url, data=data, headers=headers)
+
     return dict(form=form)
