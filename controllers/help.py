@@ -2,10 +2,6 @@ def index():
     return dict()
 
 def search():
-    """
-        At present search for hospitals working
-        @todo: Need to complete search for all types of organisations
-    """
 
     get_vars = request.vars
     q = get_vars['q'].lower()

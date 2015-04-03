@@ -25,13 +25,16 @@ response.menu = [
     (T('Report Disaster'), False, URL('report', 'index'), []),
     (T('Get Help!'), False, URL('help', 'index'), []),
     (T('Contact Us'), False, URL('contact', 'index'), []),
-    (T('Send Email'), False, URL('default', 'email'), []),
     (T('ObservationReport'), False, URL('observation', 'index'), []),
     (T('SOS'), False, URL('sos', 'index'), []),
     (T('Register Organisation'), False, URL('register', 'org'), []),
     (T('Register User'), False, URL('register', 'user'), []),
-    (T('Login'), False, URL('login', 'index'), []),
     (T('Response Form'), False, URL('response', 'index'), []),
+    (T('Login'), False, URL('login', 'index'), []),
 ]
+
+if session.user:
+    response.menu.append((T('Logout'), False, URL('login', 'logout'), []))
+    response.menu.remove((T('Login'), False, URL('login', 'index'), []))
 
 if "auth" in locals(): auth.wikimenu() 

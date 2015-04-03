@@ -1,4 +1,9 @@
 def index():
+
+    if session.user is None:
+        response.flash = "Please Login!"
+        redirect(URL(c="login", f="index"))
+
     form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
                                                              "Floods",
                                                              "Landslides",

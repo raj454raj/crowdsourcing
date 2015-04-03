@@ -18,6 +18,8 @@ def index():
     return auth.wiki()
     """
     response.flash = T("Welcome to DisRes!!!")
+    if session.user is None:
+        response.flash = "Please Login!"
     return dict()
 
 
@@ -41,6 +43,11 @@ def user():
 
 
 def email():
+
+    if session.user is None:
+        response.flash = "Please Login!"
+        redirect(URL(c="login", f="index"))
+
     form = FORM(TABLE(TR(TD('Username:'), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
                       TR(TD('Password:'), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
                       TR(TD('Send To:'), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
