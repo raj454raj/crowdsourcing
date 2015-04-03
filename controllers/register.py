@@ -2,7 +2,8 @@ def org():
 
     form = FORM(TABLE(TR(TD("Organistion Name: "), TD(INPUT(_name="org_name"))),
                       TR(TD("Email: "), TD(INPUT(_name="email", _type="email"))),
-                      TR(TD("Phone Number: "), TD(INPUT(_name="username"))),
+                      TR(TD("Phone Number: "), TD(INPUT(_name="username",
+                                                        requires=IS_LENGTH(10)))),
                       TR(TD("Password: "), TD(INPUT(_name="password", _type="password"))),
                       TR(TD("Address: "), TD(INPUT(_name="address"))),
                       TR(TD("Type: "), TD(SELECT(OPTION("Earthquake Specific", _value="EQ"),

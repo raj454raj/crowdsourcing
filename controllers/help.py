@@ -34,40 +34,81 @@ def search():
                                        ["PoliceStation-hyd", "phone4", "email4", 20, 75, "Gachibowli"]
                                        ]
                      }
-    searched_list = {"hospitals": [],
-                     "firestation": [],
-                     "policestation": []}
+    # Send HTTP request to the REST server
+    import requests, json
+    url = "http://127.0.0.1:9000/organisations/"
+    headers = {'content-type': 'application/json'}
+    r = requests.get(url, headers=headers)
+    list_organisations = json.loads(r.text)
+    complete_data = {}
+
+    type_dict = {"EQ": "Earthquake Specific",
+                 "FL": "Flood Specific",
+                 "TSU": "Tsunami Specific",
+                 "CYC": "Cyclone Specific",
+                 "FI": "Fire Station",
+                 "P": "Police",
+                 "H": "Hospital",
+                 "NGOM": "NGO(Medical)",
+                 "NGOR": "NGO(Rescue)",
+                 "NGOS": "NGO(Shelter)",
+                 "BB": "Blood Bank",
+                 "V": "Volunteer",
+                 "MISC": "Miscellaneous"}
+
+    for i in list_organisations:
+        try:
+            complete_data[type_dict[i["org_type"]]].append(i)
+        except KeyError:
+            complete_data[type_dict[i["org_type"]]] = [i]
+
+    searched_list = {"Earthquake Specific": [],
+                     "Flood Specific": [],
+                     "Tsunami Specific": [],
+                     "Cyclone Specific": [],
+                     "Fire Station": [],
+                     "Police": [],
+                     "Hospital": [],
+                     "NGO(Medical)": [],
+                     "NGO(Rescue)": [],
+                     "NGO(Shelter)": [],
+                     "Blood Bank": [],
+                     "Volunteer": [],
+                     "Miscellaneous": []}
 
     rad = 5                                 # Radius for searching by coordinates lat+-rad and lon+-rad
 
     for i in complete_data:
         if searchby == "name":
             for j in complete_data[i]:
-                if j[0].lower().__contains__(q):
+                if j["org_name"].lower().__contains__(q):
                     searched_list[i].append(j)
         elif searchby == "type":
             if i.lower().__contains__(q):
                 searched_list[i].extend(complete_data[i])
         elif searchby == "address":
+            # @todo: Complete this - Return address from server
+            """
             for j in complete_data[i]:
                 if j[5].lower().__contains__(q):
                     searched_list[i].append(j)
+            """
+        """
         else:
             for j in complete_data[i]:
                 if (lat - rad < j[3] and j[3] < lat + rad) and \
                    (lon - rad < j[4] and j[4] < lon + rad):
                     searched_list[i].append(j)
+        """
 
     table = TABLE(TR(TD(B("Organisation Name")),
                      TD(B("Organisation Type")),
                      TD(B("Contact")),
-                     TD(B("Address"))
                      ),
                   _class="table",
                   )
 
     for i in searched_list:
         for j in searched_list[i]:
-            table.append(TR(TD(j[0]), TD(i), TD(j[1] + ", " + j[2]),
-                            TD(j[5])))
+            table.append(TR(TD(j["org_name"]), TD(i), TD(j["mobile"])))
     return table
