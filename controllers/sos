@@ -26,7 +26,7 @@ def index():
                     
                            TR(TD("Description: "),
                          INPUT(_name="description", _type="text",
-                                  _style="height:300px; width:800px"),
+                                  _placeholder="Latitude",_style="height:300px; width:800px"),
                            
                          ),                      
  

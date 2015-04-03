@@ -16,12 +16,24 @@ def index():
                                   _step="0.000001", _id="lon",
                                   _placeholder="Longitude")),
                          ),
+                      
                       TR(TD("Get my current coordinates: "),
                          TD(INPUT(_name="current-location", _type="checkbox",
                                   _onclick="fillCoordinates()", _id="check")),
                          ),
-                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px")))
+
+                      TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px"))),
+                    
+                           TR(TD("Description: "),
+                         INPUT(_name="description", _type="text",
+                                  _style="height:300px; width:800px"),
+                           
+                         ),                      
+ 
+
                       ),
+
+
                 INPUT(_name="submit", _type="submit", _value="Report"))
     return dict(form=form)
 
