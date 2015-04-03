@@ -16,31 +16,21 @@ def search():
         lat = float(get_vars['lat'])
         lon = float(get_vars['lon'])
 
-    # @todo: At present complete_data is hardcoded but as the server starts working
-    #         this can be taken from server
-    complete_data = {"hospitals": [["Hospital1", "phone1", "email1", 10, 20, "address1"],
-                                   ["Hospital2", "phone2", "email2", 20, 30, "address2"],
-                                   ["Hospital3", "phone3", "email3", 30, 40, "address3"],
-                                   ["Himagiri", "phone-hyd", "email4", 17, 78, "Gachibowli"],
-                                   ],
-                     "firestation": [["FireStation1", "phone1", "email1", 20, 30, "address1"],
-                                     ["FireStation2", "phone2", "email2", 30, 40, "address2"],
-                                     ["FireStation3", "phone3", "email3", 40, 50, "address3"],
-                                     ["FireStation4", "phone4", "email4", 15, 80, "Gachibowli"],
-                                     ],
-                     "policestation": [["PoliceStation1", "phone1", "email1", 30, 40, "address1"],
-                                       ["PoliceStation2", "phone2", "email2", 40, 50, "address2"],
-                                       ["PoliceStation3", "phone3", "email3", 50, 60, "address3"],
-                                       ["PoliceStation-hyd", "phone4", "email4", 20, 75, "Gachibowli"]
-                                       ]
-                     }
     # Send HTTP request to the REST server
     import requests, json
     url = "http://127.0.0.1:9000/organisations/"
     headers = {'content-type': 'application/json'}
     r = requests.get(url, headers=headers)
     list_organisations = json.loads(r.text)
+
     complete_data = {}
+    temp_list = []
+
+    for i in list_organisations:
+        url = "http://127.0.0.1:9000/organisations/" + str(i["id"]) + "/"
+        headers = {'content-type': 'application/json'}
+        r = requests.get(url, headers=headers)
+        temp_list.append(json.loads(r.text))
 
     type_dict = {"EQ": "Earthquake Specific",
                  "FL": "Flood Specific",
@@ -56,7 +46,7 @@ def search():
                  "V": "Volunteer",
                  "MISC": "Miscellaneous"}
 
-    for i in list_organisations:
+    for i in temp_list:
         try:
             complete_data[type_dict[i["org_type"]]].append(i)
         except KeyError:
@@ -87,19 +77,14 @@ def search():
             if i.lower().__contains__(q):
                 searched_list[i].extend(complete_data[i])
         elif searchby == "address":
-            # @todo: Complete this - Return address from server
-            """
             for j in complete_data[i]:
-                if j[5].lower().__contains__(q):
+                if j["address"].lower().__contains__(q):
                     searched_list[i].append(j)
-            """
-        """
         else:
             for j in complete_data[i]:
-                if (lat - rad < j[3] and j[3] < lat + rad) and \
-                   (lon - rad < j[4] and j[4] < lon + rad):
+                if (lat - rad < float(j["latitude"]) and float(j["latitude"]) < lat + rad) and \
+                   (lon - rad < float(j["longitude"]) and float(j["longitude"]) < lon + rad):
                     searched_list[i].append(j)
-        """
 
     table = TABLE(TR(TD(B("Organisation Name")),
                      TD(B("Organisation Type")),
@@ -110,5 +95,5 @@ def search():
 
     for i in searched_list:
         for j in searched_list[i]:
-            table.append(TR(TD(j["org_name"]), TD(i), TD(j["mobile"])))
+            table.append(TR(TD(j["org_name"]), TD(i), TD(j["user"]["username"])))
     return table
