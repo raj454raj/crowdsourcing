@@ -26,6 +26,8 @@ response.menu = [
     (T('Get Help!'), False, URL('help', 'index'), []),
     (T('Contact Us'), False, URL('contact', 'index'), []),
     (T('Send Email'), False, URL('default', 'email'), []),
+    (T('ObservationReport'), False, URL('observation', 'index'), []),
+    (T('SOS'), False, URL('sos', 'index'), []),
     (T('Register Organisation'), False, URL('register', 'org'), []),
     (T('Register User'), False, URL('register', 'user'), []),
     (T('Login'), False, URL('login', 'index'), []),

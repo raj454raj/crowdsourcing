@@ -1,0 +1,55 @@
+{{extend 'layout.html'}}
+<html>
+    <head>
+        <title> Report Disaster </title>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    </head>
+    <div class="flash">{{=response.flash or ''}}</div>
+    
+
+    <body>
+        <h2>Report Disaster</h2>
+        {{=form}}
+        <h4>Description</h4>
+        <textarea class="test" cols="40" rows="10"></textarea>
+        <script>
+
+            function fillCoordinates() {
+                if (document.getElementById("check").checked) {
+                    document.getElementById("lat").value = locationJSON["latitude"];
+                    document.getElementById("lon").value = locationJSON["longitude"];
+                }
+            }
+
+            window.onload = function() {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        locationJSON = JSON.parse(xmlhttp.responseText);
+                        var myLatLng = new google.maps.LatLng(locationJSON["latitude"], locationJSON["longitude"]);
+                        var mapOptions = {
+                            center: myLatLng,
+                            zoom: 12,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            minZoom: 3,
+                            maxZoom: 15
+                        };
+                        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+                        marker = new google.maps.Marker({
+                            position: myLatLng,
+                            map: map 
+                        });
+                        google.maps.event.addListener(map, 'click', function (e) {
+                            document.getElementById("lat").value = e.latLng.lat().toFixed(6);
+                            document.getElementById("lon").value = e.latLng.lng().toFixed(6);
+                            myLatLng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+                            marker.setPosition(myLatLng);
+                        });
+                    }
+                }
+                xmlhttp.open("GET", "get_coordinates/", true);
+                xmlhttp.send();
+            }
+</script>
+</body>
+</html>
