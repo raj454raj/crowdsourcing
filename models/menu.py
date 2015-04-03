@@ -31,6 +31,7 @@ response.menu = [
     (T('Register Organisation'), False, URL('register', 'org'), []),
     (T('Register User'), False, URL('register', 'user'), []),
     (T('Login'), False, URL('login', 'index'), []),
+    (T('Response Form'), False, URL('response', 'index'), []),
 ]
 
 if "auth" in locals(): auth.wikimenu() 
