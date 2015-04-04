@@ -8,10 +8,11 @@ def index():
                       TR(TD(INPUT(_type="submit")))))
     if request.vars:
 
+        session.client = requests.session()
         url = "http://127.0.0.1:9000/auth/"
         data = json.dumps(request.vars)
         headers = {'content-type': 'application/json'}
-        r = requests.post(url, data=data, headers=headers)
+        r = session.client.post(url, data=data, headers=headers)
 
         server_response = json.loads(r.text)
         if server_response["status"] == "invalid credentials":
@@ -19,6 +20,14 @@ def index():
         elif server_response["status"] == "logged in":
             session.user = server_response["user_type"]
             response.flash = "Logged in as " + session.user
+
+            csrftoken = session.client.cookies['csrftoken']
+            session.cookies = dict(session.client.cookies)
+            session.headers = {'content-type': 'application/json'}
+            session.headers['Referer'] = url
+            session.headers["X-CSRFToken"] = csrftoken
+            print session.cookies
+            print session.headers
             redirect(URL(c="default", f="index"))
         else:
             response.flash = "Please Login!"

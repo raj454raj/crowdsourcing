@@ -35,14 +35,13 @@ def index():
                    "Landslide": "LS",
                    }
         request_dict["dis_type"] = mapping[request_dict["dis_type"]]
-        # Send HTTP request to the REST server
         import requests, json
-        url = "http://127.0.0.1:9000/sos/"
-        headers = {'content-type': 'application/json'}
-        data = json.dumps(request_dict)
-        print data
-        r = requests.post(url, data=data, headers=headers)
-#        print r.text
+        if dict(session.client.cookies).has_key("csrftoken") is False:
+            redirect(URL("login", "index"))
+        pdata = json.dumps(request_dict)
+        pURL = "http://localhost:9000/sos/"
+        r = session.client.post(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
+
     return dict(form=form)
 
 def get_coordinates():
