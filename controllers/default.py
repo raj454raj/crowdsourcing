@@ -8,6 +8,7 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
+import requests, json
 
 def index():
     """
@@ -20,27 +21,40 @@ def index():
     response.flash = T("Welcome to DisRes!!!")
     if session.user is None:
         response.flash = "Please Login!"
+    elif session.user == "admin":
+        redirect(URL(c="default", f="admin"))
+#    elif session.user == "user":
+#        redirect(URL(c="default", f="user"))
+        
     return dict()
 
+def admin():
+    # Send HTTP request to the REST server
+    url = "http://127.0.0.1:9000/disasters/"
+    headers = {'content-type': 'application/json'}
+    r = requests.get(url, headers=headers)
+    list_organisations = json.loads(r.text)
+
+    t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude")),
+              _class="table")
+    for i in list_organisations:
+        t.append(TR(TD(A(i["created"]), _href=URL(c="default", f="disaster_details")),
+                    TD(A(i["dis_type"]), _href=URL(c="default", f="disaster_details")),
+                    TD(A(i["latitude"]), _href=URL(c="default", f="disaster_details")),
+                    TD(A(i["longitude"], _href=URL(c="default", f="disaster_details")))
+                    )
+                 )
+    return dict(t=t)
 
 def user():
-    """
-    exposes:
-    http://..../[app]/default/user/login
-    http://..../[app]/default/user/logout
-    http://..../[app]/default/user/register
-    http://..../[app]/default/user/profile
-    http://..../[app]/default/user/retrieve_password
-    http://..../[app]/default/user/change_password
-    http://..../[app]/default/user/manage_users (requires membership in
-    use @auth.requires_login()
-        @auth.requires_membership('group name')
-        @auth.requires_permission('read','table name',record_id)
-    to decorate functions that need access control
-    """
-    return dict(form=auth())
+    return dict()
 
-
+def disaster_details():
+    # Send HTTP request to the REST server
+    url = "http://127.0.0.1:9000/disasters/"
+    headers = {'content-type': 'application/json'}
+    r = requests.get(url, headers=headers)
+    return dict()
 
 def email():
 
@@ -48,11 +62,11 @@ def email():
         response.flash = "Please Login!"
         redirect(URL(c="login", f="index"))
 
-    form = FORM(TABLE(TR(TD('Username:'), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Password:'), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
-                      TR(TD('Send To:'), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Subject:'), TD(INPUT(_name='Subject', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Message:'), TD(TEXTAREA(_name='Message', requires=IS_NOT_EMPTY()))),
+    form = FORM(TABLE(TR(TD('Username: '), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Password: '), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
+                      TR(TD('Send To: '), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Subject: '), TD(INPUT(_name='Subject', requires=IS_NOT_EMPTY()))),
+                      TR(TD('Message: '), TD(TEXTAREA(_name='Message', requires=IS_NOT_EMPTY()))),
                       TR(INPUT(_type='submit', _value='SEND')),
                       ))
 

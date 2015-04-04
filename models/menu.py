@@ -22,10 +22,9 @@ response.google_analytics_id = None
 #########################################################################
 
 response.menu = [
-    (T('Report Disaster'), False, URL('report', 'index'), []),
+    (T('Observation'), False, URL('report', 'index'), []),
     (T('Get Help!'), False, URL('help', 'index'), []),
     (T('Contact Us'), False, URL('contact', 'index'), []),
-    (T('ObservationReport'), False, URL('observation', 'index'), []),
     (T('SOS'), False, URL('sos', 'index'), []),
     (T('Register Organisation'), False, URL('register', 'org'), []),
     (T('Register User'), False, URL('register', 'user'), []),

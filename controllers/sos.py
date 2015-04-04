@@ -1,17 +1,17 @@
 def index():
     form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
-                                                             "Floods",
-                                                             "Landslides",
+                                                             "Flood",
+                                                             "Landslide",
                                                              "Fire",
                                                              "Tsunami",
-                                                             "Cyclones",
-                                                             _name="type"))),
+                                                             "Cyclone",
+                                                             _name="dis_type"))),
                       TR(TD("Location: "),
-                         TD(INPUT(_name="lat", _type="number",
+                         TD(INPUT(_name="latitude", _type="number",
                                   _max="90", _min="-90",
                                   _step="0.000001", _id="lat",
                                   _placeholder="Latitude"),
-                            INPUT(_name="lon", _type="number",
+                            INPUT(_name="longitude", _type="number",
                                   _max="180", _min="-180",
                                   _step="0.000001", _id="lon",
                                   _placeholder="Longitude")),
@@ -23,18 +23,26 @@ def index():
                          ),
 
                       TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px"))),
-                    
-                           TR(TD("Description: "),
-                         INPUT(_name="description", _type="text",
-                                  _style="height:300px; width:800px"),
-                           
-                         ),                      
- 
-
-                      ),
-
-
-                INPUT(_name="submit", _type="submit", _value="Report"))
+                      TR(TD("Message: "), TD(TEXTAREA(_name="message"))),
+                      TR(INPUT(_type="submit", _value="Report"))))
+    if request.vars:
+        request_dict = dict(request.vars)
+        mapping = {"Earthquake": "EQ",
+                   "Fire": "FI",
+                   "Flood": "FL",
+                   "Tsunami": "TSU",
+                   "Cyclone": "CYC",
+                   "Landslide": "LS",
+                   }
+        request_dict["dis_type"] = mapping[request_dict["dis_type"]]
+        # Send HTTP request to the REST server
+        import requests, json
+        url = "http://127.0.0.1:9000/sos/"
+        headers = {'content-type': 'application/json'}
+        data = json.dumps(request_dict)
+        print data
+        r = requests.post(url, data=data, headers=headers)
+#        print r.text
     return dict(form=form)
 
 def get_coordinates():
