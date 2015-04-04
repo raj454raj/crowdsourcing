@@ -67,5 +67,5 @@ def user():
         data = json.dumps(request.vars)
         headers = {'content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers)
-
+        print r.text
     return dict(form=form)
