@@ -15,7 +15,7 @@
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function() {
                     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        var temp_dict = {"H": [],
+                        temp_dict = {"H": [],
                                          "P": [],
                                          "EQ": [],
                                          "CYC": [],
@@ -30,7 +30,6 @@
                                          };
                         data = "{{=org_list}}";
                         data = JSON.parse(data.replace(/&#x27;/g,'"'));
-                        console.log(data);
                         var keys = Object.keys(temp_dict);
                         var i = 0;
                         for(org in data) {
@@ -52,11 +51,10 @@
                             {
                                 lati = temp_dict[item][subitem][0];
                                 lang = temp_dict[item][subitem][1];
-                                console.log(keys[i],lati, lang);
                                 marker = new google.maps.Marker({
                                     position: new google.maps.LatLng(lati, lang),
                                     map: map, 
-                                    icon: '/crowdsourcing/static/images/hospital-building.png'
+                                    icon: '/crowdsourcing/static/images/' + item + '.png'
                                 });
                             }
                             i=i+1;
