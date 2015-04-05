@@ -34,27 +34,56 @@ def admin():
     headers = {'content-type': 'application/json'}
     r = requests.get(url, headers=headers)
     list_organisations = json.loads(r.text)
-
-    t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude")),
+    t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude"), TH("Confirm Disaster")),
               _class="table")
     for i in list_organisations:
-        t.append(TR(TD(A(i["created"]), _href=URL(c="default", f="disaster_details")),
-                    TD(A(i["dis_type"]), _href=URL(c="default", f="disaster_details")),
-                    TD(A(i["latitude"]), _href=URL(c="default", f="disaster_details")),
-                    TD(A(i["longitude"], _href=URL(c="default", f="disaster_details")))
-                    )
-                 )
+        tr = TR(TD(A(i["created"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
+                TD(A(i["dis_type"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
+                TD(A(i["latitude"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
+                TD(A(i["longitude"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))))
+        form = FORM(_action=URL(c="default", f="disaster_status", args=[i["id"]]))
+        if i["verified"] is False:
+            form.append(INPUT(_type="submit", _name="confirm", _value="Confirm"))
+        form.append(INPUT(_type="submit", _name="delete", _value="Delete"))
+        tr.append(TD(form))
+        t.append(tr)
+
     return dict(t=t)
 
 def user():
     return dict()
 
+def disaster_status():
+    dis_id = request.args[0]
+    if request.vars.has_key("confirm"):
+        if dict(session.client.cookies).has_key("csrftoken") is False:
+            redirect(URL("login", "index"))
+        pdata = json.dumps({"verified": True})
+        pURL = "http://localhost:9000/disasters/" + dis_id + "/"
+        r = session.client.patch(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
+    elif request.vars.has_key("delete"):
+        if dict(session.client.cookies).has_key("csrftoken") is False:
+            redirect(URL("login", "index"))
+        pURL = "http://localhost:9000/disasters/" + dis_id + "/"
+        r = session.client.delete(pURL, headers = session.headers, cookies = session.cookies)
+    else:
+        return "Some error ocurred"
+    redirect(URL("default", "admin"))
+
 def disaster_details():
-    # Send HTTP request to the REST server
-    url = "http://127.0.0.1:9000/disasters/"
-    headers = {'content-type': 'application/json'}
-    r = requests.get(url, headers=headers)
-    return dict()
+    dis_id = request.args[0]
+    if dict(session.client.cookies).has_key("csrftoken") is False:
+        redirect(URL("login", "index"))
+    pURL = "http://localhost:9000/sos/"
+    pdata = json.dumps({"disaster": dis_id})
+    r = session.client.get(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
+    table = TABLE(TR(TH("Created"), TH("Message"), TH("Latitude"), TH("Longitude")),
+                  _class="table")
+    res = json.loads(r.text)
+    for i in res:
+        table.append(TR(TD(i["created"]), TD(i["message"]), TD(i["latitude"]), TD(i["longitude"])))
+
+    return dict(table=table)
 
 def email():
 

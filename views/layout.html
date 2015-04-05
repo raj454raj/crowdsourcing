@@ -68,7 +68,7 @@
 
 <body>
   <!-- Navbar ================================================== -->
-  <nav class="navbar navbar-inverse" role="navigation">
+  <nav class="navbar navbar-inverse" role="navigation" style="width:101.5%;margin-left:-1%;position: fixed;z-index:5;">
     <div class="flash">{{=response.flash or ''}}</div>
     <div class="navbar-header">
       <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
@@ -78,14 +78,23 @@
     </div>
     <div class="navbar-collapse" id="navbar-collapse-01">
       <ul class="nav navbar-nav">
-        <li id="report"><a href="/crowdsourcing/report/index">Report Disaster</a></li>
-        <li id="help"><a href="/crowdsourcing/help/index">Get Help!</a></li>
-        <li id="contact"><a href="/crowdsourcing/contact/index">Contact Us</a></li>
-        <li id="email"><a href="/crowdsourcing/default/email">Send E-mail</a></li>
-        <li id="sos"><a href="/crowdsourcing/sos/index">SOS</a></li>
-        <li id="response"><a href="/crowdsourcing/response/index">Response Form</a></li>
+        {{if session.user is not None:}}
+            {{if session.user == "admin":}}
+                <li id="contact"><a href="/crowdsourcing/contact/responses">Contact Us Responses</a></li>
+            {{elif session.user == "organisation":}}
+                <li id="response"><a href="/crowdsourcing/response/index">Response Form</a></li>
+            {{elif session.user == "user":}}
+                <li id="report"><a href="/crowdsourcing/report/index">Report Disaster</a></li>
+                <li id="sos"><a href="/crowdsourcing/sos/index">SOS</a></li>
+            {{pass}}
+                <li id="help"><a href="/crowdsourcing/help/index">Get Help!</a></li>
+                <li id="display"><a href="/crowdsourcing/display/index">Display Organisations</a></li>
+            {{if session.user != "admin":}}
+                <li id="contact"><a href="/crowdsourcing/contact/index">Contact Us</a></li>
+            {{pass}}
+        {{pass}}
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" style="float:right">
         <li class="dropdown">
           <a href="/crowdsourcing/login/index" class="dropdown-toggle" data-toggle="dropdown" style="margin-left:220px;">Login</a>
           <span class="dropdown-arrow"></span>
@@ -93,14 +102,14 @@
             <li><a href="/crowdsourcing/register/org">Register Organisation</a></li>
             <li><a href="/crowdsourcing/register/user">Register User</a></li>
             <li class="divider"></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="/crowdsourcing/login/logout">Logout</a></li>
           </ul>
         </li>         
       </ul>
         <!--<a href="/crowdsourcing/login/index" style="margin-left:220px;">Login</a>-->
     </div>
   </nav><!--/top navbar -->
-
+  <br/>
   <div class="container">
     <section id="main" class="main row">
         {{if left_sidebar_enabled:}}
