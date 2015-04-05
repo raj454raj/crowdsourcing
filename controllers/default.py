@@ -9,16 +9,7 @@
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
 import requests, json
-import datetime
-mapping = {"EQ": "Earthquake",
-           "FI": "Fire",
-           "FL": "Flood",
-           "TSU": "Tsunami",
-           "CYC": "Cyclone",
-           "LS": "Landslide",
-           }
-def getdatetime(x):
-    return str(datetime.datetime.strptime(x.replace("T", " ").replace("Z", ""), "%Y-%m-%d %H:%M:%S.%f")).split(".")[0]
+imp = local_import('imp')
 
 def index():
     """
@@ -28,14 +19,18 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
+
     response.flash = T("Welcome to DisRes!!!")
-    url = "http://localhost:9000/disasters/"
-    r = requests.get(url, headers={"content-type": "application/json"})
+    url = imp.APP_URL + "disasters/"
+    r = requests.get(url,
+                     headers=session.headers,
+                     cookies=session.cookies,
+                     proxies=imp.PROXY)
     dis_list = json.loads(r.text)
     table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude")),
                   _class="table")
     for i in dis_list:
-        table.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"])))
+        table.append(TR(TD(imp.getdatetime(i["created"])), TD(imp.mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"])))
 
     if session.user is None:
         response.flash = "Please Login!"
@@ -48,17 +43,15 @@ def index():
 def organisation():
     t = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude"), TH("Message"), TH("Take Action")),
               _class="table")
-    url = "http://127.0.0.1:9000/sos/"
+    url = imp.APP_URL + "sos/"
     headers = {'content-type': 'application/json'}
-    r = session.client.get(url, headers=session.headers, cookies=session.cookies)
+    r = session.client.get(url,
+                           headers=session.headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
     soss = json.loads(r.text)
     for i in soss:
-        url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + i["latitude"] + "%2C" + i["longitude"]
-        tempjson = json.loads(requests.get(url,
-                                           headers={"content-type": "application/json"},
-                                           proxies={"http": "proxy.iiit.ac.in:8080"}).text)
-#        print tempjson["results"][0]["address_components"][0]["long_name"]
-        t.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["disaster"]["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]), TD(i["message"]),
+        t.append(TR(TD(imp.getdatetime(i["created"])), TD(imp.mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]), TD(i["message"]),
                     TD(FORM(INPUT(_type="submit", _value="Respond"),
                             _action=URL(c='response', f='index', args=[i["id"]])))))
 
@@ -66,16 +59,18 @@ def organisation():
 
 def admin():
     # Send HTTP request to the REST server
-    url = "http://127.0.0.1:9000/disasters/"
-    headers = {'content-type': 'application/json'}
-    r = session.client.get(url, headers=session.headers, cookies=session.cookies)
+    url = imp.APP_URL + "disasters/"
+    r = session.client.get(url,
+                           headers=session.headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
     list_organisations = json.loads(r.text)
 
     t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude"), TH("Confirm Disaster")),
               _class="table")
     for i in list_organisations:
-        tr = TR(TD(A(getdatetime(i["created"]), _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
-                TD(A(mapping[i["dis_type"]], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
+        tr = TR(TD(A(imp.getdatetime(i["created"]), _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
+                TD(A(imp.mapping[i["dis_type"]], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
                 TD(A(i["latitude"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
                 TD(A(i["longitude"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))))
         form = FORM(_action=URL(c="default", f="disaster_status", args=[i["id"]]))
@@ -96,13 +91,20 @@ def disaster_status():
         if dict(session.client.cookies).has_key("csrftoken") is False:
             redirect(URL("login", "index"))
         pdata = json.dumps({"verified": True})
-        pURL = "http://localhost:9000/disasters/" + dis_id + "/"
-        r = session.client.patch(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
+        pURL = imp.APP_URL + "disasters/" + dis_id + "/"
+        r = session.client.patch(pURL,
+                                 data=pdata,
+                                 headers=session.headers,
+                                 cookies=session.cookies,
+                                 proxies=imp.PROXY)
     elif request.vars.has_key("delete"):
         if dict(session.client.cookies).has_key("csrftoken") is False:
             redirect(URL("login", "index"))
-        pURL = "http://localhost:9000/disasters/" + dis_id + "/"
-        r = session.client.delete(pURL, headers = session.headers, cookies = session.cookies)
+        pURL = imp.APP_URL + "disasters/" + dis_id + "/"
+        r = session.client.delete(pURL,
+                                  headers=session.headers,
+                                  cookies=session.cookies,
+                                  proxies=imp.PROXY)
     else:
         return "Some error ocurred"
     redirect(URL("default", "admin"))
@@ -111,14 +113,18 @@ def disaster_details():
     dis_id = request.args[0]
     if dict(session.client.cookies).has_key("csrftoken") is False:
         redirect(URL("login", "index"))
-    pURL = "http://localhost:9000/sos/"
-    pdata = json.dumps({"disaster": dis_id})
-    r = session.client.get(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
+    pURL = imp.APP_URL + "sos/"
+    headers = dict(session.headers)
+    headers["disaster"] = dis_id
+    r = session.client.get(pURL,
+                           headers=headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
     table = TABLE(TR(TH("Created"), TH("Message"), TH("Latitude"), TH("Longitude")),
                   _class="table")
     res = json.loads(r.text)
     for i in res:
-        table.append(TR(TD(getdatetime(i["created"])), TD(i["message"]), TD(i["latitude"]), TD(i["longitude"])))
+        table.append(TR(TD(imp.getdatetime(i["created"])), TD(i["message"]), TD(i["latitude"]), TD(i["longitude"])))
 
     return dict(table=table)
 

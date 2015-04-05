@@ -1,3 +1,4 @@
+imp = local_import('imp')
 def index():
     return dict()
 
@@ -14,18 +15,23 @@ def search():
 
     # Send HTTP request to the REST server
     import requests, json
-    url = "http://127.0.0.1:9000/organisations/"
-    headers = {'content-type': 'application/json'}
-    r = requests.get(url, headers=headers)
+    url = imp.APP_URL + "organisations/"
+    r = session.client.get(url,
+                           headers=session.headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
     list_organisations = json.loads(r.text)
 
     complete_data = {}
     temp_list = []
 
     for i in list_organisations:
-        url = "http://127.0.0.1:9000/organisations/" + str(i["id"]) + "/"
+        url = imp.APP_URL + "organisations/" + str(i["id"]) + "/"
         headers = {'content-type': 'application/json'}
-        r = requests.get(url, headers=headers)
+        r = session.client.get(url,
+                               headers=session.headers,
+                               cookies=session.cookies,
+                               proxies=imp.PROXY)
         temp_list.append(json.loads(r.text))
 
     type_dict = {"EQ": "Earthquake Specific",
@@ -62,7 +68,7 @@ def search():
                      "Volunteer": [],
                      "Miscellaneous": []}
 
-    rad = 5                                 # Radius for searching by coordinates lat+-rad and lon+-rad
+    rad = 2                                 # Radius for searching by coordinates lat+-rad and lon+-rad
 
     for i in complete_data:
         if searchby == "name":

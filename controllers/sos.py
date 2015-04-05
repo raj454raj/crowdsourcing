@@ -1,15 +1,6 @@
 import requests, json
 import datetime
-mapping = {"EQ": "Earthquake",
-           "FI": "Fire",
-           "FL": "Flood",
-           "TSU": "Tsunami",
-           "CYC": "Cyclone",
-           "LS": "Landslide",
-           }
-
-def getdatetime(x):
-    return str(datetime.datetime.strptime(x.replace("T", " ").replace("Z", ""), "%Y-%m-%d %H:%M:%S.%f")).split(".")[0]
+imp = local_import('imp')
 
 def index():
     form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
@@ -23,11 +14,13 @@ def index():
                          TD(INPUT(_name="latitude", _type="number",
                                   _max="90", _min="-90",
                                   _step="0.000001", _id="lat",
-                                  _placeholder="Latitude"),
+                                  _placeholder="Latitude",
+                                  requires=IS_NOT_EMPTY()),
                             INPUT(_name="longitude", _type="number",
                                   _max="180", _min="-180",
                                   _step="0.000001", _id="lon",
-                                  _placeholder="Longitude")),
+                                  _placeholder="Longitude",
+                                  requires=IS_NOT_EMPTY())),
                          ),
                       
                       TR(TD("Get my current coordinates: "),
@@ -36,9 +29,12 @@ def index():
                          ),
 
                       TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px"))),
-                      TR(TD("Message: "), TD(TEXTAREA(_name="message"))),
+                      TR(TD("Message: "), TD(TEXTAREA(_name="message",
+                                                      requires=IS_NOT_EMPTY()))),
                       TR(INPUT(_type="submit", _value="Report"))))
-    if request.vars:
+
+    if form.accepts(request.post_vars):
+
         request_dict = dict(request.vars)
         mapping = {"Earthquake": "EQ",
                    "Fire": "FI",
@@ -51,9 +47,12 @@ def index():
         if dict(session.client.cookies).has_key("csrftoken") is False:
             redirect(URL("login", "index"))
         pdata = json.dumps(request_dict)
-        pURL = "http://localhost:9000/sos/"
-        r = session.client.post(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
-
+        pURL = imp.APP_URL + "sos/"
+        r = session.client.post(pURL,
+                                data=pdata,
+                                headers=session.headers,
+                                cookies=session.cookies,
+                                proxies=imp.PROXY)
     return dict(form=form)
 
 def get_coordinates():
@@ -115,22 +114,29 @@ def get_coordinates():
                            longitude=longitude))
 
 def show():
-    pURL = "http://localhost:9000/sos/"
-    r = session.client.get(pURL, headers = session.headers, cookies = session.cookies)
+    pURL = imp.APP_URL + "sos/"
+    r = session.client.get(pURL,
+                           headers=session.headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
     soss = json.loads(r.text)
     
     table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude"), TH("View Responses")),
                   _class="table")
     for i in soss:
-        table.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["disaster"]["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]),
+        table.append(TR(TD(imp.getdatetime(i["created"])), TD(imp.mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]),
                         TD(FORM(INPUT(_type="submit", _value="Responses"), _action=URL(c="sos", f="show_responses",
                                                                                        args=[i["id"]])))))    
     return dict(table=table)
 
 def show_responses():
-    pURL = "http://localhost:9000/responses/"
-    r = session.client.get(pURL, data=json.dumps({'sos': request.args[0]}),
-                           headers = session.headers, cookies = session.cookies)
+    pURL = imp.APP_URL + "responses/"
+    headers = dict(session.headers)
+    headers["sos"] = request.args[0]
+    r = session.client.get(pURL,
+                           headers=headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
     responses = json.loads(r.text)
 
     aidtype = {"R": "Rescue",
@@ -154,8 +160,8 @@ def show_responses():
                  "MISC": "Miscellaneous"}
 
     for i in responses:
-        table.append(TR(TD(getdatetime(i["created"])),
-                        TD(i["org"]["org_name"]),
-                        TD(type_dict[i["org"]["org_type"]]),
+        table.append(TR(TD(imp.getdatetime(i["created"])),
+                        TD(i["org_name"]),
+                        TD(type_dict[i["org_type"]]),
                         TD(aidtype[i["aid_type"]]), TD(i["response"])))
     return dict(table=table)

@@ -21,6 +21,7 @@ def index():
                                   _onclick="fillCoordinates()", _id="check")),
                          ),
                       TR(TD(), TD(DIV(_id="dvMap", _style="height:300px; width:800px"))),
+                      TR(TD("Upload Image: "), TD(INPUT(_name="fileupload", _type="file"))),
                       TR(TD("Observation: "), TD(TEXTAREA(_name="observation"))),
                       TR(INPUT(_name="submit", _type="submit", _value="Report")))
                       )

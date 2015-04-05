@@ -1,3 +1,4 @@
+imp = local_import('imp')
 def index():
     form = FORM(TABLE(TR(TD("Aid-type: "), TD(SELECT(OPTION("Rescue", _value="R"),
                                                      OPTION("Shelter", _value="S"),
@@ -12,10 +13,11 @@ def index():
 def respond():
     import requests, json
     data = dict(request.vars)
-    data["sos"] = request.args[0]
-    url = "http://127.0.0.1:9000/responses/"
-    headers = {'content-type': 'application/json'}
-    r = session.client.post(url, data=json.dumps(data), headers=session.headers, cookies=session.cookies)
+    data["sos_id"] = request.args[0]
+    url = imp.APP_URL + "responses/"
+    r = session.client.post(url,
+                            data=json.dumps(data),
+                            headers=session.headers,
+                            cookies=session.cookies,
+                            proxies=imp.PROXY)
     redirect(URL("default", "index"))
-
-
