@@ -81,11 +81,10 @@
         {{if session.user is not None:}}
             {{if session.user == "admin":}}
                 <li id="contact"><a href="/crowdsourcing/contact/responses">Contact Us Responses</a></li>
-            {{elif session.user == "organisation":}}
-                <li id="response"><a href="/crowdsourcing/response/index">Response Form</a></li>
             {{elif session.user == "user":}}
                 <li id="report"><a href="/crowdsourcing/report/index">Report Disaster</a></li>
                 <li id="sos"><a href="/crowdsourcing/sos/index">SOS</a></li>
+                <li id="mysos"><a href="/crowdsourcing/sos/show">My SOSs</a></li>
             {{pass}}
                 <li id="help"><a href="/crowdsourcing/help/index">Get Help!</a></li>
                 <li id="display"><a href="/crowdsourcing/display/index">Display Organisations</a></li>

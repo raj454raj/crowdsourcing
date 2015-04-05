@@ -23,16 +23,29 @@ def index():
         response.flash = "Please Login!"
     elif session.user == "admin":
         redirect(URL(c="default", f="admin"))
-#    elif session.user == "user":
-#        redirect(URL(c="default", f="user"))
-        
+    elif session.user == "organisation":
+        redirect(URL(c="default", f="organisation"))
     return dict()
+
+def organisation():
+    t = TABLE(TR(TH("Created"), TH("Latitude"), TH("Longitude"), TH("Message"), TH("Take Action")),
+              _class="table")
+    url = "http://127.0.0.1:9000/sos/"
+    headers = {'content-type': 'application/json'}
+    r = session.client.get(url, headers=session.headers, cookies=session.cookies)
+    soss = json.loads(r.text)
+    for i in soss:
+        t.append(TR(TD(i["created"]), TD(i["latitude"]), TD(i["longitude"]), TD(i["message"]),
+                    TD(FORM(INPUT(_type="submit", _value="Respond"),
+                            _action=URL(c='response', f='index', args=[i["id"]])))))
+
+    return dict(t=t)
 
 def admin():
     # Send HTTP request to the REST server
     url = "http://127.0.0.1:9000/disasters/"
     headers = {'content-type': 'application/json'}
-    r = requests.get(url, headers=headers)
+    r = session.client.get(url, headers=session.headers, cookies=session.cookies)
     list_organisations = json.loads(r.text)
     t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude"), TH("Confirm Disaster")),
               _class="table")

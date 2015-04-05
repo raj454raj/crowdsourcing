@@ -1,3 +1,4 @@
+import requests, json
 def index():
     form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
                                                              "Flood",
@@ -35,7 +36,6 @@ def index():
                    "Landslide": "LS",
                    }
         request_dict["dis_type"] = mapping[request_dict["dis_type"]]
-        import requests, json
         if dict(session.client.cookies).has_key("csrftoken") is False:
             redirect(URL("login", "index"))
         pdata = json.dumps(request_dict)
@@ -101,3 +101,30 @@ def get_coordinates():
                            city=city,
                            latitude=latitude,
                            longitude=longitude))
+
+def show():
+    pURL = "http://localhost:9000/sos/"
+    r = session.client.get(pURL, headers = session.headers, cookies = session.cookies)
+    soss = json.loads(r.text)
+    table = TABLE(TR(TH("Created"), TH("Latitude"), TH("Longitude"), TH("View Responses")),
+                  _class="table")
+
+    for i in soss:
+        table.append(TR(TD(i["created"]), TD(i["latitude"]), TD(i["longitude"]),
+                        TD(FORM(INPUT(_type="submit", _value="Responses"), _action=URL(c="sos", f="show_responses",
+                                                                                       args=[i["id"]])))))    
+    return dict(table=table)
+
+def show_responses():
+    pURL = "http://localhost:9000/responses/"
+    r = session.client.get(pURL, data=json.dumps({'sos': request.args[0]}),
+                           headers = session.headers, cookies = session.cookies)
+    responses = json.loads(r.text)
+    aidtype = {"R": "Rescue",
+               "S": "Shelter",
+               "M": "Medical"}
+    table = TABLE(TR(TH("Created"), TH("Aid Type"), TH("Message")),
+                  _class="table")
+    for i in responses:
+        table.append(TR(TD(i["created"]), TD(aidtype[i["aid_type"]]), TD(i["response"])))
+    return dict(table=table)

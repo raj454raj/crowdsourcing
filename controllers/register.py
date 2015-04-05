@@ -1,11 +1,13 @@
 def org():
-
-    form = FORM(TABLE(TR(TD("Organistion Name: "), TD(INPUT(_name="org_name"))),
+    form = FORM(TABLE(TR(TD("Organistion Name: "), TD(INPUT(_name="org_name",
+                                                            requires=IS_NOT_EMPTY()))),
                       TR(TD("Email: "), TD(INPUT(_name="email", _type="email"))),
                       TR(TD("Phone Number: "), TD(INPUT(_name="username",
-                                                        requires=IS_LENGTH(10)))),
-                      TR(TD("Password: "), TD(INPUT(_name="password", _type="password"))),
-                      TR(TD("Address: "), TD(INPUT(_name="address"))),
+                                                        requires=IS_NOT_EMPTY()))),
+                      TR(TD("Password: "), TD(INPUT(_name="password", _type="password",
+                                                    requires=IS_NOT_EMPTY()))),
+                      TR(TD("Address: "), TD(INPUT(_name="address",
+                                                   requires=IS_NOT_EMPTY()))),
                       TR(TD("Type: "), TD(SELECT(OPTION("Earthquake Specific", _value="EQ"),
                                                  OPTION("Flood Specific", _value="FL"),
                                                  OPTION("Tsunami Specific", _value="TSU"),
@@ -23,18 +25,20 @@ def org():
                          TD(INPUT(_name="latitude", _type="number",
                                   _max="90", _min="-90",
                                   _step="0.000001", _id="lat",
-                                  _placeholder="Latitude"),
+                                  _placeholder="Latitude",
+                                  requires=IS_NOT_EMPTY()),
                             INPUT(_name="longitude", _type="number",
                                   _max="180", _min="-180",
                                   _step="0.000001", _id="lon",
-                                  _placeholder="Longitude")),
+                                  _placeholder="Longitude",
+                                  requires=IS_NOT_EMPTY())),
                          ),
-                      TR(TD("Description: "), TD(TEXTAREA(_name="description"))),
+                      TR(TD("Description: "), TD(TEXTAREA(_name="description",
+                                                          requires=IS_NOT_EMPTY()))),
                       TR(TD(INPUT(_type="submit", _value="Register")))
                       ))
 
     if request.vars:
-
         request_dict = {}
         for i in request.vars:
             if i not in ['username', 'password', 'email']:
@@ -49,7 +53,6 @@ def org():
         data = json.dumps(request_dict)
         headers = {'content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers)
-
     return dict(form=form)
 
 def user():
