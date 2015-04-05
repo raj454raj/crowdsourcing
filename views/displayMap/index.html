@@ -1,0 +1,101 @@
+{{extend 'layout.html'}}
+<html>
+    <head>
+        <title> Map </title>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    </head>
+    <div class="flash">{{=response.flash or ''}}</div>
+    <body>
+        <h2>Locations</h2>
+        {{=form}}
+        <script>
+
+        
+
+            window.onload = function() {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        var temp_dict = {"hospitals":[["17.3","78.4"],["17.5","78.9"]],"policestation":[["18","77"],]
+
+                         };
+                         var keys = Object.keys(temp_dict);
+                        // console.log(temp_dict["hospitals"][1])
+                        var i =0;
+                       
+                           
+                        locationJSON = JSON.parse(xmlhttp.responseText);
+                        //console.log(locationJSON);
+                        var myLatLng = new google.maps.LatLng(locationJSON["latitude"], locationJSON["longitude"]);
+
+                        console.log(myLatLng);
+                        var mapOptions = {
+                            center: myLatLng,
+                            zoom: 15,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            minZoom: 3,
+                            maxZoom: 20 
+                        };
+                        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+                         for(item in temp_dict){
+                            for(subitem in temp_dict[item])
+                            {
+                                lati = temp_dict[item][subitem][0];
+                                lang = temp_dict[item][subitem][1];
+                                console.log(keys[i],lati, lang);
+                        if(keys[i] == "hospitals")
+                        {
+                            //console.log("SDF");
+                        
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, lang),
+                            map: map, 
+                            icon: 'https://mapicons.mapsmarker.com/wp-content/uploads/mapicons/shape-default/color-f34648/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/hospital-building.png'
+                        });
+                        }
+                        if(keys[i] == "policestation")
+                        {
+                            //console.log("SDF");
+                        
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, lang),
+                            map: map, 
+                            icon: 'https://mapicons.mapsmarker.com/wp-content/uploads/mapicons/shape-default/color-3875d7/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/laundromat.png'
+                        });
+                        }
+                        if(keys[i] == "firestation")
+                        {
+                            //console.log("SDF");
+                        
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, lang),
+                            map: map, 
+                            icon: 'https://mapicons.mapsmarker.com/wp-content/uploads/mapicons/shape-default/color-3875d7/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/firemen.png'
+                        });
+                        }
+                        if(keys[i] == "militarybase")
+                        {
+                            //console.log("SDF");
+                        
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, lang),
+                            map: map, 
+                            icon: 'https://mapicons.mapsmarker.com/wp-content/uploads/mapicons/shape-default/color-3875d7/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/military.png'
+                        });
+                        }
+                        // google.maps.event.addListener(map, 'click', function (e) {
+                        //     document.getElementById("lat").value = e.latLng.lat().toFixed(6);
+                        //     document.getElementById("lon").value = e.latLng.lng().toFixed(6);
+                        //     myLatLng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+                        //     marker.setPosition(myLatLng);
+                        // });
+                    }i=i+1;}
+                    }
+                }
+                xmlhttp.open("GET", "get_coordinates/", true);
+                xmlhttp.send();
+            }
+</script>
+
+</body>
+</html>

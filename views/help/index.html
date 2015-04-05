@@ -2,16 +2,59 @@
 <html>
     <head>
         <title>Get Help</title>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script>
             var filter;
+
+            function displayMap()
+            {
+              var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                      var temp_dict = {"hospitals":[["17.3","78.4"],["17.5","78.9"]],"policestation":[["18","77"],]
+
+                         };
+                         var keys = Object.keys(temp_dict);
+                        // console.log(temp_dict["hospitals"][1])
+                        var i =0;
+                        locationJSON = JSON.parse(xmlhttp.responseText);
+              var myLatLng = new google.maps.LatLng(locationJSON["latitude"], locationJSON["longitude"]);
+                        var mapOptions = {
+                            center: myLatLng,
+                            zoom: 12,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            minZoom: 3,
+                            maxZoom: 15
+                        };
+                        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+                        marker = new google.maps.Marker({
+                            position: myLatLng,
+                            map: map 
+                        });
+                        
+                        
+                    google.maps.event.addListener(map, 'click', function (e) {
+                            document.getElementById("latinp").value = e.latLng.lat().toFixed(6);
+                            document.getElementById("loninp").value = e.latLng.lng().toFixed(6);
+                            myLatLng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+                            marker.setPosition(myLatLng);
+                        });
+                      }
+                    }
+                    xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
+                    xmlhttp.send();
+            }
+
             function fillCoordinates() {
                  if (document.getElementById("current-coord").checked) {
                      var xmlhttp = new XMLHttpRequest();
                      xmlhttp.onreadystatechange = function() {
                          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                              locationJSON = JSON.parse(xmlhttp.responseText);
+                             console.log(locationJSON);
                              document.getElementById("latinp").value = locationJSON["latitude"];
                              document.getElementById("loninp").value = locationJSON["longitude"];
+
                              getResponse();
                          }
                      }
@@ -27,7 +70,11 @@
                var searchdiv = document.getElementById("search-div");
                var coordinatesinput = document.getElementById("coordinates-input");
                if (coordinatesinput)
-                   searchdiv.removeChild(coordinatesinput);
+               {
+
+                    searchdiv.removeChild(coordinatesinput);
+                   // console.log(coordinatesinput);
+               }
                searchdiv.innerHTML = "<input type='text' id='search' placeholder='Search...' onkeyup='getResponse()'/>";
                filter = document.getElementById("filter").value;
                if (filter == "Organisation Name")
@@ -36,14 +83,18 @@
                    filter = "type";
                filter = filter.toLowerCase();
                if (filter == "coordinates") {
+                console.log("SDF");
                    searchdiv.removeChild(document.getElementById("search"));
                    searchdiv.innerHTML = "<div id='coordinates-input'>" +
                                          "<table>" +
                                          "<tr><td><input type='number' id='latinp' onkeyup='getResponse()' placeholder='Latitude' step='0.01' min='-90' max='90'/></td>" +
                                          "<td><input type='number' id='loninp' onkeyup='getResponse()' placeholder='Longitude' step='0.01' min='-180' max='180'/></td>" +
-                                         "<td><input type='checkbox' id='current-coord' onclick='fillCoordinates()'/></td></tr>" +
+                                         "<td><input type='checkbox' id='current-coord' onclick='fillCoordinates()'/></td>" +
+                                         "<td>Get my current Coords.</td></tr>" +
+                                         "<tr><td id = 'dvMap' style='height:300px; width:800px'></td></tr>"
                                          "</table>" +
                                          "</div>";
+                                         displayMap();
                }
             }
 
@@ -69,6 +120,7 @@
                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                        temp = xmlhttp.responseText;
                        document.getElementById("responseTable").innerHTML = temp;
+
                    }
                }
                xmlhttp.open("GET", "search?q=" + search +
