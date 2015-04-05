@@ -1,15 +1,17 @@
 {{extend 'layout.html'}}
 <html>
     <head>
-        <title> Report Observation </title>
+        <title> Report Disaster </title>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     </head>
     <div class="flash">{{=response.flash or ''}}</div>
+    
+
     <body>
-        <h2>Report Observation</h2>
+        <h2>Report Disaster</h2>
         {{=form}}
         <script>
-            document.getElementById("report").className = "active";
+            document.getElementById("sos").className = "active";
 
             function fillCoordinates() {
                 if (document.getElementById("check").checked) {

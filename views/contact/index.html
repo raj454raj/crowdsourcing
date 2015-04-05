@@ -5,7 +5,11 @@
         <title>Contact Us</title>
     </head>
     <body>
+    <div class="flash">{{=response.flash or ''}}</div>
         <h2>Contact Us</h2>
         <p>{{=form}}</p>
     </body>
+    <script>
+    	document.getElementById("contact").className = "active";
+    </script>
 </html>

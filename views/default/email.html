@@ -1,0 +1,7 @@
+{{extend 'layout.html'}}
+<h2>Send Email</h2>
+<div class="flash">{{=response.flash or ''}}</div>
+{{=form}}
+<script>
+	document.getElementById("email").className = "active";
+</script>

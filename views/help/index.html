@@ -3,7 +3,27 @@
     <head>
         <title>Get Help</title>
         <script>
+            document.getElementById("help").className = "active";
             var filter;
+            function fillCoordinates() {
+                 if (document.getElementById("current-coord").checked) {
+                     var xmlhttp = new XMLHttpRequest();
+                     xmlhttp.onreadystatechange = function() {
+                         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                             locationJSON = JSON.parse(xmlhttp.responseText);
+                             document.getElementById("latinp").value = locationJSON["latitude"];
+                             document.getElementById("loninp").value = locationJSON["longitude"];
+                             getResponse();
+                         }
+                     }
+                     xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
+                     xmlhttp.send();
+                 }
+                 else {
+                     return false;
+                 }
+            }
+
             function setFilter() {
                var searchdiv = document.getElementById("search-div");
                var coordinatesinput = document.getElementById("coordinates-input");
@@ -19,8 +39,11 @@
                if (filter == "coordinates") {
                    searchdiv.removeChild(document.getElementById("search"));
                    searchdiv.innerHTML = "<div id='coordinates-input'>" +
-                                         "<input type='number' id='latinp' onkeyup='getResponse()' placeholder='Latitude' step='0.01' min='-90' max='90'/>" +
-                                         "<input type='number' id='loninp' onkeyup='getResponse()' placeholder='Longitude' step='0.01' min='-180' max='180'/>" +
+                                         "<table>" +
+                                         "<tr><td><input type='number' id='latinp' onkeyup='getResponse()' placeholder='Latitude' step='0.01' min='-90' max='90'/></td>" +
+                                         "<td><input type='number' id='loninp' onkeyup='getResponse()' placeholder='Longitude' step='0.01' min='-180' max='180'/></td>" +
+                                         "<td><input type='checkbox' id='current-coord' onclick='fillCoordinates()'/></td></tr>" +
+                                         "</table>" +
                                          "</div>";
                }
             }
@@ -45,7 +68,7 @@
                var xmlhttp = new XMLHttpRequest();
                xmlhttp.onreadystatechange = function() {
                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                       temp = xmlhttp.responseText
+                       temp = xmlhttp.responseText;
                        document.getElementById("responseTable").innerHTML = temp;
                    }
                }
@@ -57,7 +80,7 @@
             }
         </script>
     </head>
-
+    <div class="flash">{{=response.flash or ''}}</div>
     <body onload="setFilter()">
         <h2>Search</h2>
         <select id="filter" onchange="setFilter()">

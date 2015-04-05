@@ -1,2 +1,57 @@
 {{extend 'layout.html'}}
 <h1>DisRes</h1>
+<script src="/crowdsourcing/static/js/bootstrap.js"></script>
+<style>
+.selected img {
+    opacity:0.5;
+}
+</style>
+<div class="container">
+
+    <div class="row" style="margin-left:6px;">
+        <div class="col-md-12" id="slider">
+            
+                <div class="col-md-12" id="carousel-bounding-box">
+                    <div id="myCarousel" class="carousel slide">
+                        <!-- main slider carousel items -->
+                        <div class="carousel-inner">
+                            <div class="active item" data-slide-number="0">
+                                <img src="/crowdsourcing/static/images/fire.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="1">
+                              <img src="/crowdsourcing/static/images/cyclone.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="2">
+                                <img src="/crowdsourcing/static/images/floods.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="3">
+                                <img src="/crowdsourcing/static/images/tsunami.jpg" class="img-responsive">
+                            </div>
+                            <div class="item" data-slide-number="4">
+                                <img src="/crowdsourcing/static/images/earthquake.jpg" class="img-responsive">
+                            </div>
+                        </div>
+                        <!-- main slider carousel nav controls --> <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+
+                        <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    <!--/main slider carousel-->
+
+</div>
+<script>
+$('#myCarousel').carousel({
+    interval: 4000
+});
+
+// when the carousel slides, auto update
+$('#myCarousel').on('slid', function (e) {
+  var id = $('.item.active').data('slide-number');
+  id = parseInt(id);
+  $('[id^=carousel-selector-]').removeClass('selected');
+  $('[id=carousel-selector-'+id+']').addClass('selected');
+});
+</script>
