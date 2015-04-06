@@ -16,18 +16,18 @@
                 xmlhttp.onreadystatechange = function() {
                     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                         temp_dict = {"H": [],
-                                         "P": [],
-                                         "EQ": [],
-                                         "CYC": [],
-                                         "TSU": [],
-                                         "FL": [],
-                                         "FI": [],
-                                         "NGOM": [],
-                                         "NGOS": [],
-                                         "NGOR": [],
-                                         "MISC": [],
-                                         "BB": []
-                                         };
+                                     "P": [],
+                                     "EQ": [],
+                                     "CYC": [],
+                                     "TSU": [],
+                                     "FL": [],
+                                     "FI": [],
+                                     "NGOM": [],
+                                     "NGOS": [],
+                                     "NGOR": [],
+                                     "MISC": [],
+                                     "BB": []
+                                     };
                         data = "{{=org_list}}";
                         data = JSON.parse(data.replace(/&#x27;/g,'"'));
                         var keys = Object.keys(temp_dict);

@@ -9,6 +9,13 @@
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
 import requests, json
+mapping = {"EQ": "Earthquake",
+           "FI": "Fire",
+           "FL": "Flood",
+           "TSU": "Tsunami",
+           "CYC": "Cyclone",
+           "LS": "Landslide",
+           }
 
 def index():
     """
@@ -19,13 +26,21 @@ def index():
     return auth.wiki()
     """
     response.flash = T("Welcome to DisRes!!!")
+    url = "http://localhost:9000/disasters/"
+    r = requests.get(url, headers={"content-type": "application/json"})
+    dis_list = json.loads(r.text)
+    table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude")),
+                  _class="table")
+    for i in dis_list:
+        table.append(TR(TD(i["created"]), TD(mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"])))
+
     if session.user is None:
         response.flash = "Please Login!"
     elif session.user == "admin":
         redirect(URL(c="default", f="admin"))
     elif session.user == "organisation":
         redirect(URL(c="default", f="organisation"))
-    return dict()
+    return dict(table=table)
 
 def organisation():
     t = TABLE(TR(TH("Created"), TH("Latitude"), TH("Longitude"), TH("Message"), TH("Take Action")),
@@ -51,7 +66,7 @@ def admin():
               _class="table")
     for i in list_organisations:
         tr = TR(TD(A(i["created"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
-                TD(A(i["dis_type"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
+                TD(A(mapping[i["dis_type"]], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
                 TD(A(i["latitude"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))),
                 TD(A(i["longitude"], _href=URL(c="default", f="disaster_details", args=[i["id"]]))))
         form = FORM(_action=URL(c="default", f="disaster_status", args=[i["id"]]))
