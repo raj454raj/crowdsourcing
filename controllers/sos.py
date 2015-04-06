@@ -1,4 +1,16 @@
 import requests, json
+import datetime
+mapping = {"EQ": "Earthquake",
+           "FI": "Fire",
+           "FL": "Flood",
+           "TSU": "Tsunami",
+           "CYC": "Cyclone",
+           "LS": "Landslide",
+           }
+
+def getdatetime(x):
+    return str(datetime.datetime.strptime(x.replace("T", " ").replace("Z", ""), "%Y-%m-%d %H:%M:%S.%f")).split(".")[0]
+
 def index():
     form = FORM(TABLE(TR(TD("Type of disaster: "), TD(SELECT("Earthquake",
                                                              "Flood",
@@ -106,11 +118,11 @@ def show():
     pURL = "http://localhost:9000/sos/"
     r = session.client.get(pURL, headers = session.headers, cookies = session.cookies)
     soss = json.loads(r.text)
-    table = TABLE(TR(TH("Created"), TH("Latitude"), TH("Longitude"), TH("View Responses")),
+    
+    table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude"), TH("View Responses")),
                   _class="table")
-
     for i in soss:
-        table.append(TR(TD(i["created"]), TD(i["latitude"]), TD(i["longitude"]),
+        table.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["disaster"]["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]),
                         TD(FORM(INPUT(_type="submit", _value="Responses"), _action=URL(c="sos", f="show_responses",
                                                                                        args=[i["id"]])))))    
     return dict(table=table)
@@ -120,11 +132,30 @@ def show_responses():
     r = session.client.get(pURL, data=json.dumps({'sos': request.args[0]}),
                            headers = session.headers, cookies = session.cookies)
     responses = json.loads(r.text)
+
     aidtype = {"R": "Rescue",
                "S": "Shelter",
                "M": "Medical"}
-    table = TABLE(TR(TH("Created"), TH("Aid Type"), TH("Message")),
+    table = TABLE(TR(TH("Created"), TH("Organisation Name"), TH("Organisation Type"), TH("Aid Type"), TH("Message")),
                   _class="table")
+
+    type_dict = {"EQ": "Earthquake Specific",
+                 "FL": "Flood Specific",
+                 "TSU": "Tsunami Specific",
+                 "CYC": "Cyclone Specific",
+                 "FI": "Fire Station",
+                 "P": "Police",
+                 "H": "Hospital",
+                 "NGOM": "NGO(Medical)",
+                 "NGOR": "NGO(Rescue)",
+                 "NGOS": "NGO(Shelter)",
+                 "BB": "Blood Bank",
+                 "V": "Volunteer",
+                 "MISC": "Miscellaneous"}
+
     for i in responses:
-        table.append(TR(TD(i["created"]), TD(aidtype[i["aid_type"]]), TD(i["response"])))
+        table.append(TR(TD(getdatetime(i["created"])),
+                        TD(i["org"]["org_name"]),
+                        TD(type_dict[i["org"]["org_type"]]),
+                        TD(aidtype[i["aid_type"]]), TD(i["response"])))
     return dict(table=table)

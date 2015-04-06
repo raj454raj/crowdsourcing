@@ -80,7 +80,7 @@
       {{if session.user is not None:}}
       <ul class="nav navbar-nav">
             {{if session.user == "admin":}}
-                <li id="contact"><a href="/crowdsourcing/contact/responses">Contact Us Responses</a></li>
+<!--                <li id="contact"><a href="/crowdsourcing/contact/responses">Contact Us Responses</a></li>-->
             {{elif session.user == "user":}}
                 <li id="report"><a href="/crowdsourcing/report/index">Report Disaster</a></li>
                 <li id="sos"><a href="/crowdsourcing/sos/index">SOS</a></li>
@@ -89,7 +89,7 @@
                 <li id="help"><a href="/crowdsourcing/help/index">Get Help!</a></li>
                 <li id="display"><a href="/crowdsourcing/display/index">Display Organisations</a></li>
             {{if session.user != "admin":}}
-                <li id="contact"><a href="/crowdsourcing/contact/index">Contact Us</a></li>
+<!--                <li id="contact"><a href="/crowdsourcing/contact/index">Contact Us</a></li>-->
             {{pass}}
       </ul>
       <ul class="nav navbar-nav navbar-right" style="float:right">
