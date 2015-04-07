@@ -1,14 +1,14 @@
 {{extend 'layout.html'}}
 <html>
     <head>
-        <title> Report Disaster </title>
+        <title> SoS </title>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     </head>
     <div class="flash">{{=response.flash or ''}}</div>
     
 
     <body>
-        <h2>Report Disaster</h2>
+        <h2>SoS</h2>
         {{=form}}
         <script>
             document.getElementById("sos").className = "active";

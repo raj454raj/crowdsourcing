@@ -12,10 +12,8 @@ def index():
 def respond():
     import requests, json
     data = dict(request.vars)
-    data["sos"] = request.args[0]
+    data["sos_id"] = request.args[0]
     url = "http://127.0.0.1:9000/responses/"
     headers = {'content-type': 'application/json'}
     r = session.client.post(url, data=json.dumps(data), headers=session.headers, cookies=session.cookies)
     redirect(URL("default", "index"))
-
-

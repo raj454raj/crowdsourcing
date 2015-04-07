@@ -52,13 +52,12 @@ def organisation():
     headers = {'content-type': 'application/json'}
     r = session.client.get(url, headers=session.headers, cookies=session.cookies)
     soss = json.loads(r.text)
+    url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=17.44166%2C78.52182"
+    tempjson = json.loads(requests.get(url,
+                                       headers={"content-type": "application/json"},
+                                       proxies={"http": "proxy.iiit.ac.in:8080"}).text)
     for i in soss:
-        url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + i["latitude"] + "%2C" + i["longitude"]
-        tempjson = json.loads(requests.get(url,
-                                           headers={"content-type": "application/json"},
-                                           proxies={"http": "proxy.iiit.ac.in:8080"}).text)
-#        print tempjson["results"][0]["address_components"][0]["long_name"]
-        t.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["disaster"]["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]), TD(i["message"]),
+        t.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]), TD(i["message"]),
                     TD(FORM(INPUT(_type="submit", _value="Respond"),
                             _action=URL(c='response', f='index', args=[i["id"]])))))
 

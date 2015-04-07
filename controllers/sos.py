@@ -53,7 +53,7 @@ def index():
         pdata = json.dumps(request_dict)
         pURL = "http://localhost:9000/sos/"
         r = session.client.post(pURL, data = pdata, headers = session.headers, cookies = session.cookies)
-
+        print r.text
     return dict(form=form)
 
 def get_coordinates():
@@ -122,7 +122,7 @@ def show():
     table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude"), TH("View Responses")),
                   _class="table")
     for i in soss:
-        table.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["disaster"]["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]),
+        table.append(TR(TD(getdatetime(i["created"])), TD(mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"]),
                         TD(FORM(INPUT(_type="submit", _value="Responses"), _action=URL(c="sos", f="show_responses",
                                                                                        args=[i["id"]])))))    
     return dict(table=table)
@@ -155,7 +155,7 @@ def show_responses():
 
     for i in responses:
         table.append(TR(TD(getdatetime(i["created"])),
-                        TD(i["org"]["org_name"]),
-                        TD(type_dict[i["org"]["org_type"]]),
+                        TD(i["org_name"]),
+                        TD(type_dict[i["org_type"]]),
                         TD(aidtype[i["aid_type"]]), TD(i["response"])))
     return dict(table=table)
