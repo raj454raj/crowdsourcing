@@ -1,3 +1,5 @@
+imp = local_import('imp')
+
 def org():
     form = FORM(TABLE(TR(TD("Organistion Name: "), TD(INPUT(_name="org_name",
                                                             requires=IS_NOT_EMPTY()))),
@@ -37,8 +39,7 @@ def org():
                                                           requires=IS_NOT_EMPTY()))),
                       TR(TD(INPUT(_type="submit", _value="Register")))
                       ))
-
-    if request.vars:
+    if form.accepts(request.post_vars):
         request_dict = {}
         for i in request.vars:
             if i not in ['username', 'password', 'email']:
@@ -49,26 +50,36 @@ def org():
                                 }
         # Send HTTP request to the REST server
         import requests, json
-        url = "http://127.0.0.1:9000/organisations/"
+        url = imp.APP_URL + "organisations/"
         data = json.dumps(request_dict)
-        headers = {'content-type': 'application/json'}
-        r = requests.post(url, data=data, headers=headers)
+        r = requests.post(url,
+                          data=data,
+                          headers=session.headers,
+                          cookies=session.cookies,
+                          proxies=imp.PROXY)
     return dict(form=form)
 
 def user():
 
-    form = FORM(TABLE(TR(TD("Phone Number: "), TD(INPUT(_name="username"))),
-                      TR(TD("Email: ", TD(INPUT(_name="email", _type="email")))),
-                      TR(TD("Password: ", TD(INPUT(_name="password", _type="password")))),
+    form = FORM(TABLE(TR(TD("Phone Number: "), TD(INPUT(_name="username",
+                                                        requires=IS_NOT_EMPTY()))),
+                      TR(TD("Email: ", TD(INPUT(_name="email", _type="email",
+                                                requires=IS_NOT_EMPTY())))),
+                      TR(TD("Password: ", TD(INPUT(_name="password", _type="password",
+                                                   requires=IS_NOT_EMPTY())))),
                       TR(TD(INPUT(_type="submit", _value="Register")))))
 
     import json, requests
-    if request.vars:
+    if form.accepts(request.post_vars):
 
         # Send HTTP request to the REST server
-        url = "http://127.0.0.1:9000/users/"
+        url = imp.APP_URL + "users/"
         data = json.dumps(request.vars)
-        headers = {'content-type': 'application/json'}
-        r = requests.post(url, data=data, headers=headers)
+        r = requests.post(url,
+                          data=data,
+                          headers=session.headers,
+                          cookies=session.cookies,
+                          proxies=imp.PROXY)
+        print r
         print r.text
     return dict(form=form)

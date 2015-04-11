@@ -7,6 +7,24 @@
 <!--[if IE 9]><html class="ie9 ie-lte9 no-js" lang="{{=T.accepted_language or 'en'}}"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
 <head>
+<style>
+    .facebook a:hover {
+        color: #3b5998;
+    }
+    .twitter a:hover {
+        color: #55acee;
+    }
+    .github a:hover {
+        color: #000000;
+    }
+    .instagram a:hover {
+        color: #3f729b;
+    }
+    .google a:hover {
+        color: #db4437;
+    }
+    
+</style>
 <title>{{=response.title or request.application}}</title>
   <!--[if !HTML5]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge{{=not request.is_local and ',chrome=1' or ''}}">
@@ -34,7 +52,7 @@
     <meta property="og:image" content="http://lipis.github.io/bootstrap-social/assets/img/bootstrap-social.png" />
   <link rel="shortcut icon" href="{{=URL('static','images/favicon.ico')}}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{=URL('static','images/favicon.png')}}">
-
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <!-- All JavaScript at the bottom, except for Modernizr which enables
        HTML5 elements & feature detects -->
   <script src="{{=URL('static','js/modernizr.custom.js')}}"></script>
@@ -71,12 +89,9 @@
   <nav class="navbar navbar-inverse" role="navigation" style="width:101.5%;margin-left:-1%;position: fixed;z-index:5;">
     <div class="flash">{{=response.flash or ''}}</div>
     <div class="navbar-header">
-      <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
-        <span class="sr-only">Toggle navigation</span>
-      </button>-->
       <a class="navbar-brand" href="/crowdsourcing/default/index">DisRes</a>
     </div>
-    <div class="navbar-collapse" id="navbar-collapse-01">
+    <div class="navbar-collapse navHeaderCollapse" id="navbar-collapse-01">
       {{if session.user is not None:}}
       <ul class="nav navbar-nav">
             {{if session.user == "admin":}}
@@ -85,6 +100,8 @@
                 <li id="report"><a href="/crowdsourcing/report/index">Report Disaster</a></li>
                 <li id="sos"><a href="/crowdsourcing/sos/index">SOS</a></li>
                 <li id="mysos"><a href="/crowdsourcing/sos/show">My SOSs</a></li>
+            {{else:}}
+                <li id="disshow"><a href="/crowdsourcing/display/disaster_show">Nearby</a></li>
             {{pass}}
                 <li id="help"><a href="/crowdsourcing/help/index">Get Help!</a></li>
                 <li id="display"><a href="/crowdsourcing/display/index">Display Organisations</a></li>
@@ -92,12 +109,12 @@
 <!--                <li id="contact"><a href="/crowdsourcing/contact/index">Contact Us</a></li>-->
             {{pass}}
       </ul>
-      <ul class="nav navbar-nav navbar-right" style="float:right">
+      <ul class="nav navHeaderCollapse navbar-nav navbar-right" style="float:right">
         <li id="logout"><a href="/crowdsourcing/login/logout">Logout</a></li>
       </ul>
       {{pass}}
       {{if session.user is None:}}
-      <ul class="nav navbar-nav navbar-right" style="float:right">
+      <ul class="nav navbar-nav navHeaderCollapse navbar-right" style="float:right">
         <li class="dropdown">
           <a href="" class="dropdown-toggle" data-toggle="dropdown" style="margin-left:220px;">Get Involved</a>
           <span class="dropdown-arrow"></span>
@@ -145,14 +162,19 @@
         <footer class="footer span12" id="footer">
               {{block footer}} <!-- this is default footer -->
 
-                <center><strong style="color:black;">Contact Us</strong><br>
+                <center><strong style="color:black;">Contact Us</strong><br/>
                 <div class="social-icons push-top">
                   <ul class="social-icons" style="list-style-type:none;display:inline-flex;">
 
-                    <li class="facebook"><a href="http://www.facebook.com/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Facebook"><img alt="Facebook" src="{{=URL('static', 'images/facebook-round.png')}}" /></a></li>
-                    <li class="twitter"><a href="http://www.twitter.com/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Twitter"><img alt="Twitter" src="{{=URL('static', 'images/twitter-round.png')}}" /></a></li>
-                    <li class="pinterest"><a href="http://www.pinterest.com/company/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Pinterest"><img alt="Pinterest" src="{{=URL('static', 'images/pinterest.png')}}" /></a></li>
-                    <li class="google-plus"><a href="https://plus.google.com/108744412005771885874/posts?hl=en" target="_blank" data-placement="bottom" rel="tooltip" title="google"><img alt="Google-Plus" src="{{=URL('static', 'images/googleplus.png')}}" /></a></li>
+                    <li class="facebook"><a href="http://www.facebook.com/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Facebook"><i class="fa fa-facebook fa-2x"></i></a></li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li class="twitter"><a href="http://www.twitter.com/disres" target="_blank" data-placement="bottom" rel="tooltip" title="Twitter"><i class="fa fa-twitter fa-2x"></i></a></li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li class="google"><a href="https://plus.google.com/108744412005771885874/posts?hl=en" target="_blank" data-placement="bottom" rel="tooltip" title="google"><i class="fa fa-google-plus fa-2x"></i></a></li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li class="github"><a href="https://github.com/raj454raj/crowdsourcing" target="_blank" data-placement="bottom" rel="tooltip" title="github"><i class="fa fa-github fa-2x"></i></a></li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li class="instagram"><a href="" target="_blank" data-placement="bottom" rel="tooltip" title="instagram"><i class="fa fa-instagram fa-2x"></i></a></li>
                   </ul>
                 </div></center>
               </div>
@@ -186,4 +208,3 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   <script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script>
 </body>
 </html>
-

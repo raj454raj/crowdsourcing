@@ -1,19 +1,27 @@
 import json, requests
+imp = local_import('imp')
+
 def index():
     if session.user is None:
         response.flash = "Please Login!"
 
-    form = FORM(TABLE(TR(TD("User Name: "), TD(INPUT(_name="username"))),
-                      TR(TD("Password: "), TD(INPUT(_name="password", _type="password"))),
+    form = FORM(TABLE(TR(TD("User Name: "), TD(INPUT(_name="username",
+                                                     requires=IS_NOT_EMPTY()))),
+                      TR(TD("Password: "), TD(INPUT(_name="password", _type="password",
+                                                    requires=IS_NOT_EMPTY()))),
                       TR(TD(INPUT(_type="submit")))))
-    if request.vars:
+
+    if form.accepts(request.post_vars):
 
         session.client = requests.session()
-        url = "http://127.0.0.1:9000/auth/"
+        url = imp.APP_URL + "auth/"
         data = json.dumps(request.vars)
         headers = {'content-type': 'application/json'}
-        r = session.client.post(url, data=data, headers=headers)
-
+        r = session.client.post(url,
+                                data=data,
+                                headers=headers,
+                                cookies=session.cookies,
+                                proxies=imp.PROXY)
         server_response = json.loads(r.text)
         if server_response["status"] == "invalid credentials":
             response.flash = "Invalid Credentials!"
@@ -34,9 +42,10 @@ def index():
 
 def logout():
 
-    url = "http://127.0.0.1:9000/auth/"
-    headers = {'content-type': 'application/json'}
-    r = requests.delete(url, headers=headers)
+    url = imp.APP_URL  + "auth/"
+    r = requests.delete(url,
+                        headers=session.headers,
+                        cookies=session.cookies,
+                        proxies=imp.PROXY)
     session.user = None
     redirect(URL(c="login", f="index"))
-
