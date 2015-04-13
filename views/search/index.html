@@ -1,3 +1,6 @@
-{{for i in tweet_list:}}
-	{{i}}
+{{extend 'layout.html'}}
+{{=form}}
+{{if search_query is not None:}}
+<h5>Top 100 search results for: {{=search_query}}</h5>
 {{pass}}
+{{=t}}
