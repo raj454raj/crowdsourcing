@@ -35,6 +35,7 @@ def org():
                                   _placeholder="Longitude",
                                   requires=IS_NOT_EMPTY())),
                          ),
+                      TR(TD(), TD(DIV(_id="dvMap", _style="width:800px;height:300px;"))),
                       TR(TD("Description: "), TD(TEXTAREA(_name="description",
                                                           requires=IS_NOT_EMPTY()))),
                       TR(TD(INPUT(_type="submit", _value="Register")))
