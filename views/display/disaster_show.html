@@ -1,3 +1,120 @@
 {{extend 'layout.html'}}
+<html>
+<head>
+<style type="text/css">
+	#dvMap{
+		height: 450px;
+		width: 1150px;
+	}
+</style>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+</head>
 <h2>Disasters near me</h2>
 {{=t}}
+<body>
+<div id="dvMap" >
+</div>
+	<script type="text/javascript">
+	window.onload = function(distype, lati, longi)
+            {
+
+              var xmlhttp = new XMLHttpRequest();
+              xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    	locationJSON = JSON.parse(xmlhttp.responseText);
+                        var myLatLng = new google.maps.LatLng(locationJSON["latitude"], locationJSON["longitude"]);
+                        var mapOptions = {
+                            center: myLatLng,
+                            zoom: 12,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            minZoom: 3,
+                            maxZoom: 20
+                        };
+                        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+                        marker = new google.maps.Marker({
+                            position: myLatLng,
+                            map: map 
+                        });
+                    	var tab = document.getElementById("table");
+						for (var i = 1, row; row = tab.rows[i]; i++) {
+   						//iterate through rows
+   						//rows would be accessed using the "row" variable assigned in the for loop
+   							for (var j = 1, col; col = row.cells[j]; j++) {
+     						//iterate through columns
+     						//columns would be accessed using the "col" variable assigned in the for loop
+     							if(j==1)
+     							{
+     								distype = col.innerHTML;
+     							}
+     							if(j==2)
+     							{
+     								lati = col.innerHTML;
+     							}
+     							if(j == 3)
+     							{
+     								longi = col.innerHTML;
+     							}
+     //console.log(distype, lati, longi);
+   							}
+   							console.log(distype, lati, longi);
+   							
+                        if(distype=="Fire")
+                        {
+							 marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, longi),
+                            map: map, 
+                            icon: '/crowdsourcing/static/images/Fire.png'
+                        });
+                        }
+                        if(distype=="Tsunami")
+                        {
+							 marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, longi),
+                            map: map, 
+                            icon: '/crowdsourcing/static/images/TSU.png'
+                        });
+                        }
+                        if(distype=="Flood")
+                        {
+							 marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, longi),
+                            map: map, 
+                            icon: '/crowdsourcing/static/images/FL.png'
+                        });
+                        }
+                        if(distype=="Earthquake")
+                        {
+							 marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, longi),
+                            map: map, 
+                            icon: '/crowdsourcing/static/images/EQ.png'
+                        });
+                        }
+                        if(distype=="Cyclone")
+                        {
+                        	 marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lati, longi),
+                            map: map, 
+                            icon: '/crowdsourcing/static/images/CYC.png'
+                        });
+                        }
+   						}
+                        
+                        // google.maps.event.addListener(map, 'click', function (e) {
+                        //     //document.getElementById("latinp").value = e.latLng.lat().toFixed(6);
+                        //     //document.getElementById("loninp").value = e.latLng.lng().toFixed(6);
+                        //     myLatLng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+                        //     marker.setPosition(myLatLng);
+                        // });
+                    }
+                }
+                xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
+                xmlhttp.send();
+            
+                 
+            }
+	
+
+	</script>
+</body>
+</html>

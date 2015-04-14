@@ -88,7 +88,8 @@ def disaster_show():
                             proxies=imp.PROXY)
     temp = json.loads(r.text)
     t = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude")),
-              _class="table")
+              _id="table",
+              _style="visibility:collapse;")
     for i in temp:
         t.append(TR(TD(imp.getdatetime(i["created"])), TD(imp.mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"])))
     return dict(t=t)
