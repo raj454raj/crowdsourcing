@@ -97,6 +97,22 @@ def disaster_status():
                                  headers=session.headers,
                                  cookies=session.cookies,
                                  proxies=imp.PROXY)
+        
+        pURL = imp.APP_URL + "organisations/"
+        headers = dict(session.headers)
+        headers["disaster"] = dis_id
+        r = session.client.get(pURL,
+                           headers=headers,
+                           cookies=session.cookies,
+                           proxies=imp.PROXY)
+        r = json.loads(r.text)
+        org_list = []
+        for i in r:
+          org_list.append(str(i["email"]))
+        email(org_list)  
+
+
+
     elif request.vars.has_key("delete"):
         if dict(session.client.cookies).has_key("csrftoken") is False:
             redirect(URL("login", "index"))
@@ -128,38 +144,18 @@ def disaster_details():
 
     return dict(table=table)
 
-def email():
+def email(orglist):
+      from gluon.tools import Mail 
+      mail = Mail() 
+      mail.settings.server = 'smtp.gmail.com:587'
+      mail.settings.sender = 'helpatdisres@gmail.com' 
+      mail.settings.login = 'helpatdisres@gmail.com:iiit123disres' 
+      mail.send(to=orglist, 
+               subject='Hello World - Test email from web2py', 
+               # If reply_to is omitted, then mail.settings.sender is used 
+               message='hi there') 
 
-    if session.user is None:
-        response.flash = "Please Login!"
-        redirect(URL(c="login", f="index"))
-
-    form = FORM(TABLE(TR(TD('Username: '), TD(INPUT(_name='name', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Password: '), TD(INPUT(_name='password', _type='password', requires=IS_NOT_EMPTY()))), 
-                      TR(TD('Send To: '), TD(INPUT(_name='sendto', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Subject: '), TD(INPUT(_name='Subject', requires=IS_NOT_EMPTY()))),
-                      TR(TD('Message: '), TD(TEXTAREA(_name='Message', requires=IS_NOT_EMPTY()))),
-                      TR(INPUT(_type='submit', _value='SEND')),
-                      ))
-
-    if form.accepts(request,session):
-        email = str(request.vars['name']) + "@students.iiit.ac.in"
-        password = str(request.vars['password'])
-        from gluon.tools import Mail
-        mail = Mail()
-        mail.settings.server = "students.iiit.ac.in:25"
-        mail.settings.sender = email
-        mail.settings.login = str(request.vars['name']) + ":" + password
-        mail.send(to=[str(request.vars['sendto'])],
-                  subject=str(request.vars['Subject']),
-                  # If reply_to is omitted, then mail.settings.sender is used
-                  message=str(request.vars['Message']))
-        response.flash = 'Message sent'
-    elif form.errors:
-        response.flash = 'Error Occured'
-    else:
-        response.flash = 'Please fill the form'
-    return dict(form=form)
+      return
 
 @cache.action()
 def download():
