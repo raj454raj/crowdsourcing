@@ -18,7 +18,7 @@ OAUTH_TOKEN_SECRET = "16Tj3u1OMCln4gqGP1al02CV82fx930FGznjgHct6Vp4h"
 
 proxy = {"http": "http://proxy.iiit.ac.in:8080", "https" : "https://proxy.iiit.ac.in:8080"}
 
-INSTAGRAM_ACCESS_TOKEN = "1833988825.999e36e.a3efced35bd1407d9a7719390da9255b"
+INSTAGRAM_ACCESS_TOKEN = "1836108388.483db0f.2677865148ef43758ea27166ec0241cc"
 
 def __get_oauth__():
     oauth = OAuth1(CONSUMER_KEY,
@@ -37,7 +37,7 @@ def index():
         network = request.vars['network']
         search_query = request.vars['search']
         if network == "twitter":
-            url = "https://api.twitter.com/1.1/search/tweets.json?q="+urllib.quote(search_query, '')+"&count=100&result_type=mixed"
+            url = "https://api.twitter.com/1.1/search/tweets.json?q="+urllib.quote(search_query, '')+"&count=100&result_type=recent"
             oauth = __get_oauth__()
             r = requests.get(url = url, auth = oauth, proxies = proxy)
             r = r.json()
