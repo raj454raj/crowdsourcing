@@ -33,7 +33,7 @@
                         var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
                         marker = new google.maps.Marker({
                             position: myLatLng,
-                            map: map 
+                            map: map
                         });
                     	var tab = document.getElementById("table");
 						for (var i = 1, row; row = tab.rows[i]; i++) {
@@ -58,47 +58,49 @@
    							}
    							console.log(distype, lati, longi);
    							
-                        if(distype=="Fire")
-                        {
-							 marker = new google.maps.Marker({
+                        if(distype=="Fire") {
+							marker = new google.maps.Marker({
                             position: new google.maps.LatLng(lati, longi),
                             map: map, 
-                            icon: '/crowdsourcing/static/images/Fire.png'
-                        });
+                            icon: '/crowdsourcing/static/images/fire.png'
+                            });
                         }
-                        if(distype=="Tsunami")
-                        {
-							 marker = new google.maps.Marker({
+                        else if(distype=="Tsunami") {
+							marker = new google.maps.Marker({
                             position: new google.maps.LatLng(lati, longi),
                             map: map, 
-                            icon: '/crowdsourcing/static/images/TSU.png'
-                        });
+                            icon: '/crowdsourcing/static/images/tsunami.png'
+                            });
                         }
-                        if(distype=="Flood")
-                        {
-							 marker = new google.maps.Marker({
+                        else if(distype=="Flood") {
+							marker = new google.maps.Marker({
                             position: new google.maps.LatLng(lati, longi),
                             map: map, 
-                            icon: '/crowdsourcing/static/images/FL.png'
-                        });
+                            icon: '/crowdsourcing/static/images/flood.png'
+                            });
                         }
-                        if(distype=="Earthquake")
-                        {
-							 marker = new google.maps.Marker({
+                        else if(distype=="Earthquake") {
+							marker = new google.maps.Marker({
                             position: new google.maps.LatLng(lati, longi),
                             map: map, 
-                            icon: '/crowdsourcing/static/images/EQ.png'
-                        });
+                            icon: '/crowdsourcing/static/images/earthquake.png'
+                            });
                         }
-                        if(distype=="Cyclone")
-                        {
-                        	 marker = new google.maps.Marker({
+                        else if(distype=="Cyclone") {
+                        	marker = new google.maps.Marker({
                             position: new google.maps.LatLng(lati, longi),
                             map: map, 
-                            icon: '/crowdsourcing/static/images/CYC.png'
-                        });
+                            icon: '/crowdsourcing/static/images/cyclone.png'
+                            });
                         }
-   						}
+                        else if(distype=="Landslide") {
+                            marker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(lati, longi),
+                                        map: map,
+                                        icon: '/crowdsourcing/static/images/landslide.png'
+                                    });
+                        }
+   						
                         
                         // google.maps.event.addListener(map, 'click', function (e) {
                         //     //document.getElementById("latinp").value = e.latLng.lat().toFixed(6);
@@ -108,6 +110,7 @@
                         // });
                     }
                 }
+              }
                 xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
                 xmlhttp.send();
             

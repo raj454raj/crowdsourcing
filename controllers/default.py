@@ -24,9 +24,12 @@ def index():
     url = imp.APP_URL + "disasters/"
     r = requests.get(url,
                      headers=session.headers,
-                     cookies=session.cookies,
+#                     cookies=session.cookies,
                      proxies=imp.PROXY)
     dis_list = json.loads(r.text)
+    print r
+    print "**"
+    print r.text
     table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude")),
                   _class="table")
     for i in dis_list:
@@ -64,6 +67,8 @@ def admin():
                            headers=session.headers,
                            cookies=session.cookies,
                            proxies=imp.PROXY)
+    print r
+    print r.text
     list_organisations = json.loads(r.text)
 
     t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude"), TH("Confirm Disaster")),
@@ -141,8 +146,30 @@ def disaster_details():
     res = json.loads(r.text)
     for i in res:
         table.append(TR(TD(imp.getdatetime(i["created"])), TD(i["message"]), TD(i["latitude"]), TD(i["longitude"])))
+    table2 = TABLE(TR(TH("Image"), TH(), TH("Message")))
+    table2.append(TR(TD(IMG(_src="/crowdsourcing/static/images/1.jpg",
+                            _style="height:250px;width:450px")),
+                     TD(),
+                     TD("Building collapsed by earthquake in Gachibowli"),
+                     ))
+    table2.append(TR(TD(), TD(), TD(), BR()))
+    table2.append(TR(TD(IMG(_src="/crowdsourcing/static/images/2.jpg",
+                            _style="height:250px;width:450px")),
+                     TD(),
+                     TD("Earthquake here.")))
+    return dict(table=table, table2=table2)
 
-    return dict(table=table)
+def email(orglist):
+      from gluon.tools import Mail 
+      mail = Mail() 
+      mail.settings.server = 'smtp.gmail.com:587'
+      mail.settings.sender = 'helpatdisres@gmail.com' 
+      mail.settings.login = 'helpatdisres@gmail.com:iiit123disres' 
+      mail.send(to=orglist, 
+               subject='Hello World - Test email from web2py', 
+               # If reply_to is omitted, then mail.settings.sender is used 
+               message='hi there') 
+      return
 
 def email(orglist):
       from gluon.tools import Mail 

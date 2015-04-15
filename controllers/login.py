@@ -34,10 +34,6 @@ def index():
             session.headers = {'content-type': 'application/json'}
             session.headers['Referer'] = url
             session.headers["X-CSRFToken"] = csrftoken
-            print session.headers
-            print session.cookies
-            print type(session.headers)
-            print type(session.cookies)
             redirect(URL(c="default", f="index"))
         else:
             response.flash = "Please Login!"
