@@ -77,7 +77,7 @@
                    filter = "type";
                filter = filter.toLowerCase();
                if (filter == "coordinates") {
-                   searchdiv.removeChild(document.getElementById("search"));
+                   searchdiv.removeChild(document.getElementById("search-inputdiv"));
                    searchdiv.innerHTML = "<div id='coordinates-input'>" +
                                          "<table>" +
                                          "<tr><td><input type='number' id='latinp' onkeyup='getResponse()' placeholder='Latitude' step='0.01' min='-90' max='90'/></td>" +
@@ -92,11 +92,13 @@
             }
 
             function getResponse() {
-               var search = document.getElementById("search");
-               if (search != null)
+               var search = document.getElementById("search-inputdiv");
+               if (search != null) {
                    search = search.value;
-               else
+               }
+               else {
                    search = "";
+               }
                var latitude = document.getElementById("latinp");
                var longitude = document.getElementById("loninp");
                if (!latitude || !longitude) {
@@ -134,7 +136,7 @@
         </select>
         <br />
         <div id="search-div">
-            <input type="text" id="search" placeholder="Search..." onkeyup="getResponse()"/>
+            <input type="text" id="search-inputdiv" placeholder="Search..." onkeyup="getResponse()"/>
             <div id="coordinates-input">
                 <input id="latinp" type="number" placeholder="Latitude" step="0.01" min="-90" max="90"/>
                 <input id="loninp" type="number" placeholder="Longitude" step="0.01" min="-180" max="180"/>

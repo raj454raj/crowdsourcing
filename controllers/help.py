@@ -21,7 +21,6 @@ def search():
                            cookies=session.cookies,
                            proxies=imp.PROXY)
     list_organisations = json.loads(r.text)
-
     complete_data = {}
     temp_list = []
 
@@ -98,4 +97,5 @@ def search():
     for i in searched_list:
         for j in searched_list[i]:
             table.append(TR(TD(j["org_name"]), TD(i), TD(j["user"]["username"])))
+
     return table

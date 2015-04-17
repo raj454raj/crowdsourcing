@@ -2,10 +2,12 @@ imp = local_import('imp')
 import requests, json, ast
 
 def index():
+
     form = FORM(TABLE(TR(TD(DIV(_id="dvMap", _style="height: 450px; width:1150px")))))
     url = imp.APP_URL + "organisations/"
     r = requests.get(url, headers=session.headers, proxies=imp.PROXY)
     org_list = json.loads(r.text)
+
     for i in org_list:
         url = imp.APP_URL + "organisations/" + str(i["id"]) + "/"
         headers = {'content-type': 'application/json'}
@@ -14,6 +16,7 @@ def index():
         i["latitude"] = full["latitude"]
         i["longitude"] = full["longitude"]
         i["address"] = full["address"]
+
     org_list = ast.literal_eval(json.dumps(org_list))
     return dict(form=form, org_list=org_list)
 

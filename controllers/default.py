@@ -24,14 +24,12 @@ def index():
     url = imp.APP_URL + "disasters/"
     r = requests.get(url,
                      headers=session.headers,
-#                     cookies=session.cookies,
                      proxies=imp.PROXY)
     dis_list = json.loads(r.text)
-    print r
-    print "**"
-    print r.text
+
     table = TABLE(TR(TH("Created"), TH("Disaster"), TH("Latitude"), TH("Longitude")),
                   _class="table")
+
     for i in dis_list:
         table.append(TR(TD(imp.getdatetime(i["created"])), TD(imp.mapping[i["dis_type"]]), TD(i["latitude"]), TD(i["longitude"])))
 
@@ -67,8 +65,7 @@ def admin():
                            headers=session.headers,
                            cookies=session.cookies,
                            proxies=imp.PROXY)
-    print r
-    print r.text
+
     list_organisations = json.loads(r.text)
 
     t = TABLE(TR(TH("Created"), TH("Disaster Type"), TH("Latitude"), TH("Longitude"), TH("Confirm Disaster")),
@@ -111,6 +108,7 @@ def disaster_status():
                            cookies=session.cookies,
                            proxies=imp.PROXY)
         r = json.loads(r.text)
+
         org_list = []
         for i in r:
           org_list.append(str(i["email"]))
@@ -169,19 +167,6 @@ def email(orglist):
                subject='Hello World - Test email from web2py', 
                # If reply_to is omitted, then mail.settings.sender is used 
                message='hi there') 
-      return
-
-def email(orglist):
-      from gluon.tools import Mail 
-      mail = Mail() 
-      mail.settings.server = 'smtp.gmail.com:587'
-      mail.settings.sender = 'helpatdisres@gmail.com' 
-      mail.settings.login = 'helpatdisres@gmail.com:iiit123disres' 
-      mail.send(to=orglist, 
-               subject='Hello World - Test email from web2py', 
-               # If reply_to is omitted, then mail.settings.sender is used 
-               message='hi there') 
-
       return
 
 @cache.action()
