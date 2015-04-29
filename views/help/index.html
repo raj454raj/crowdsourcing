@@ -40,9 +40,8 @@
                         });
                     }
                 }
-                xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
+                xmlhttp.open("GET", "{{=URL(c='display', f='get_coordinates')}}", true);
                 xmlhttp.send();
-            
                  
             }
             function fillCoordinates() {
@@ -56,7 +55,7 @@
                              getResponse();
                          }
                      }
-                     xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
+                     xmlhttp.open("GET", "{{=URL(c='display', f='get_coordinates')}}", true);
                      xmlhttp.send();
                  }
                  else {

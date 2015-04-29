@@ -20,6 +20,7 @@
        xmlhttp.onreadystatechange = function() {
            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                locationJSON = JSON.parse(xmlhttp.responseText);
+               console.log(xmlhttp.responseText);
                var myLatLng = new google.maps.LatLng(locationJSON["latitude"], locationJSON["longitude"]);
                var mapOptions = {
                    center: myLatLng,
@@ -94,7 +95,7 @@
                }
            }
        }
-       xmlhttp.open("GET", "{{=URL(c='report', f='get_coordinates')}}", true);
+       xmlhttp.open("GET", "{{=URL(c='display', f='get_coordinates')}}", true);
        xmlhttp.send();
     }
 	</script>

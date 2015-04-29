@@ -144,6 +144,11 @@ def disaster_details():
     res = json.loads(r.text)
     for i in res:
         table.append(TR(TD(imp.getdatetime(i["created"])), TD(i["message"]), TD(i["latitude"]), TD(i["longitude"])))
+
+    # At the moment image is not sent to the server while submitting
+    # report. This is hardcoded for now.
+    # Though we just have to find a way to send a HTTP POST request
+    # for an image. REST Server supports image upload
     table2 = TABLE(TR(TH("Image"), TH(), TH("Message")))
     table2.append(TR(TD(IMG(_src="/crowdsourcing/static/images/1.jpg",
                             _style="height:250px;width:450px")),
