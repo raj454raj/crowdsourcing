@@ -1,5 +1,5 @@
-APP_URL = "http://localhost:9000/"#"http://disres.pythonanywhere.com/"
-PROXY = {}#{"http": "proxy.iiit.ac.in:8080"}
+APP_URL = "http://disres.pythonanywhere.com/"
+PROXY = {}
 mapping = {"EQ": "Earthquake",
            "FI": "Fire",
            "FL": "Flood",

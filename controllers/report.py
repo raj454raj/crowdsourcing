@@ -57,7 +57,7 @@ def get_coordinates():
     url = "http://ipecho.net/plain"
     try:
         # This proxy should be removed if working under internet without proxy
-        r = requests.get(url, proxies={"http": "proxy.iiit.ac.in:8080"})
+        r = requests.get(url, proxies=imp.PROXY)
         my_ip = str(r.text)
     except:
         return empty_dict
@@ -66,7 +66,7 @@ def get_coordinates():
     url = "http://api.hostip.info/get_html.php?ip=" + my_ip + "&position=true"
     try:
         # This proxy should be removed if working under internet without proxy
-        r = requests.get(url, proxies={"http": "proxy.iiit.ac.in:8080"})
+        r = requests.get(url, proxies=imp.PROXY)
         temp_list = r.text.split("\n")
     except:
         return empty_dict

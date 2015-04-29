@@ -5,6 +5,7 @@ from requests_oauthlib import OAuth1
 from pytz import timezone
 from datetime import datetime
 import HTMLParser
+imp = local_import('imp')
 
 REQUEST_TOKEN_URL = "https://api.twitter.com/oauth/request_token"
 AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize?oauth_token="
@@ -15,8 +16,6 @@ CONSUMER_SECRET = "3X8qloM9kWovmWo3eHxLvVPodSvpBGUuf590lDH2qQvjVTzyGA"
 
 OAUTH_TOKEN = "2884644275-OyciI4HVHyaMQhyCYwNBKYKZS2nNjd0UgEfYMPg"
 OAUTH_TOKEN_SECRET = "16Tj3u1OMCln4gqGP1al02CV82fx930FGznjgHct6Vp4h"
-
-proxy = {"http": "http://proxy.iiit.ac.in:8080", "https" : "https://proxy.iiit.ac.in:8080"}
 
 INSTAGRAM_ACCESS_TOKEN = "1836108388.483db0f.2677865148ef43758ea27166ec0241cc"
 
@@ -39,14 +38,14 @@ def index():
         if network == "twitter":
             url = "https://api.twitter.com/1.1/search/tweets.json?q="+urllib.quote(search_query, '')+"&count=100&result_type=recent"
             oauth = __get_oauth__()
-            r = requests.get(url = url, auth = oauth, proxies = proxy)
+            r = requests.get(url = url, auth = oauth, proxies = imp.PROXY)
             r = r.json()
             tweet_list = r['statuses']
         elif network == "instagram":
             if search_query.find(' ') > 0:
                 search_query = search_query[:search_query.find(' ')]
             url = "https://api.instagram.com/v1/tags/" + search_query + "/media/recent?access_token=" + INSTAGRAM_ACCESS_TOKEN + "&count=100"
-            r = requests.get(url = url, proxies = proxy)
+            r = requests.get(url = url, proxies = imp.PROXY)
             r = r.json()
             instagram_list = r['data']
     form = FORM(TABLE(TR(TD(INPUT(_name="search", _placeholder="Enter keywords", _value=search_query), _style="vertical-align: middle;"), TD(TAG['button']('Search Twitter ', IMG(_src="static/images/twitter.png"), _type="submit", _value="twitter", _class="btn btn-xs btn-info", _name="network")), TD(TAG['button']('Search Instagram ', IMG(_src="static/images/instagram.png"), _type="submit", _value="instagram", _class="btn btn-xs btn-danger", _name="network")))), _method="GET")
