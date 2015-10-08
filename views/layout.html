@@ -111,7 +111,7 @@
                 <li id="search"><a href="/crowdsourcing/search">Search Social Media</a></li>
       </ul>
       <ul class="nav navHeaderCollapse navbar-nav navbar-right" style="float:right">
-        <li id="logout"><a href="/crowdsourcing/login/logout">Logout</a></li>
+        <li id="logout"><a href="{{=URL('login', 'logout')}}">Logout</a></li>
       </ul>
       {{pass}}
       {{if session.user is None:}}
