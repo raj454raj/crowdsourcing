@@ -11,7 +11,7 @@ Sphinx==1.2.2
 Theano==0.6.0
 Twisted==15.0.0
 TwitterSearch==1.0.0
-Werkzeug==0.9.6
+Werkzeug==0.15.3
 XlsxWriter==0.5.5
 astropy==1.0
 atom==0.3.7
