@@ -303,7 +303,7 @@ transaction==1.4.1
 translationstring==1.1
 tweepy==2.3.0
 twilio==3.6.13
-Twisted==13.0.0
+Twisted==19.7.0
 twitter==1.14.3
 Unidecode==0.4.13
 unittest2==0.5.1
