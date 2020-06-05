@@ -38,7 +38,7 @@ cypari==1.2
 Cython==0.20.1
 dataset==0.4.0
 decorator==3.4.0
-Django==1.3.7
+Django==1.11.29
 django-blog-zinnia==0.12.3
 django-bootstrap-form==3.1
 django-classy-tags==0.4
