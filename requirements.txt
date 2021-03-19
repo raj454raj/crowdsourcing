@@ -34,7 +34,7 @@ cssselect==0.9.1
 cubes==0.10.2
 decorator==3.4.0
 django-cors-headers==1.0.0
-djangorestframework==3.1.1
+djangorestframework==3.11.2
 docutils==0.12
 enable==4.3.0
 enaml==0.9.1
