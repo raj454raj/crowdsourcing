@@ -123,7 +123,7 @@ iotop==0.6
 ipython==2.1.0
 isodate==0.4.9
 jellyfish==0.2.0
-Jinja2==2.7
+Jinja2==2.11.3
 la==0.6.0
 Logbook==0.8.1
 lxml==3.3.5
