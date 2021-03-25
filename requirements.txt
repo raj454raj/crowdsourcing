@@ -4,7 +4,7 @@ Jinja2==2.7.3
 Mako==1.0.1
 Padding==0.4
 Pattern==2.6
-PyYAML==3.11
+PyYAML==5.4
 Pygments==1.6
 Shapely==1.4.3
 Sphinx==1.2.2
