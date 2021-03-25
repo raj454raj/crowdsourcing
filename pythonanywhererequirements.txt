@@ -235,7 +235,7 @@ python-openid==2.2.5
 python-slugify==0.0.7
 pytz==2014.10
 PyVirtualDisplay==0.1.2
-PyYAML==3.11
+PyYAML==5.4
 pyzmq==13.1.0
 qrcode==2.7
 Quandl==2.2
