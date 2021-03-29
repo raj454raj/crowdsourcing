@@ -200,7 +200,7 @@ pyfits==3.1.2
 pyflakes==0.7.2
 pygal==1.2.1
 pygeoip==0.3.2
-Pygments==1.6
+Pygments==2.7.4
 pygraphviz==1.1
 pyhdf==0.8.3
 Pykka==1.1.0
