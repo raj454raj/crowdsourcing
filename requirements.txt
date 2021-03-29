@@ -5,7 +5,7 @@ Mako==1.0.1
 Padding==0.4
 Pattern==2.6
 PyYAML==3.11
-Pygments==1.6
+Pygments==2.7.4
 Shapely==1.4.3
 Sphinx==1.2.2
 Theano==0.6.0
