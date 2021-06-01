@@ -307,7 +307,7 @@ Twisted==13.0.0
 twitter==1.14.3
 Unidecode==0.4.13
 unittest2==0.5.1
-urllib3==1.5
+urllib3==1.26.5
 urwid==1.1.1
 us==0.7
 venusian==1.0a8
