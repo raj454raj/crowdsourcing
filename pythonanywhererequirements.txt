@@ -126,7 +126,7 @@ jellyfish==0.2.0
 Jinja2==2.7
 la==0.6.0
 Logbook==0.8.1
-lxml==3.3.5
+lxml==4.6.5
 Mako==0.8.1
 marisa-trie==0.5.1
 Markdown==2.3.1
