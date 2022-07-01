@@ -66,7 +66,7 @@ numba==0.13.2
 numexpr==2.3.1
 numpy==1.10.0.dev-6457686
 oauthlib==0.7.2
-openpyxl==1.8.5
+openpyxl==2.4.2
 pandas==0.14.0
 pathtools==0.1.2
 patsy==0.2.1
