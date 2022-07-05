@@ -115,7 +115,7 @@ tardis-sn==1.0.1
 tornado==3.2.1
 traits==4.4.0
 traitsui==4.4.0
-ujson==1.33
+ujson==5.4.0
 urllib3==1.10.2
 virtualenv==12.0.7
 watchdog==0.8.1
