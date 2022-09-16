@@ -1,7 +1,7 @@
 Django==1.7.7
 Flask==0.10.1
 Jinja2==2.7.3
-Mako==1.0.1
+Mako==1.2.2
 Padding==0.4
 Pattern==2.6
 PyYAML==3.11
